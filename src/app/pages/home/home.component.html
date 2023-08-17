@@ -1,0 +1,132 @@
+<div class="hero-wrap text-center">
+    <div class="container">
+        <h1 class="fw-bold">Empower Your Life with Astrological Insights</h1>
+
+        <div class="row">
+            <div class="col-lg-8 text-center mx-auto">
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p>10000+ Astrologers</p>
+                    </div>
+                    <div class="d-block">
+                        <p>10 Languages</p>
+                    </div>
+                    <div class="d-block">
+                        <p>1,00,000+ helped</p>
+                    </div>
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="section bg-black text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card service text-center">
+                            <div class="card-body">
+                                <img src="../../../assets/images/message.png">
+                                <h3 class="fw-semi-bold">Chat  with <br>astrologers</h3>
+                                <p class="text-muted">10000+ Astrologers available to chat now </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card service text-center">
+                            <div class="card-body">
+                                <img src="../../../assets/images/audio.png">
+                                <h3 class="fw-semi-bold">Call with <br>astrologers</h3>
+                                <p class="text-muted">10000+ Astrologers available to call now </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card service text-center">
+                            <div class="card-body">
+                                <img src="../../../assets/images/video.png">
+                                <h3 class="fw-semi-bold">Live <br>astrologers</h3>
+                                <p class="text-muted">10000+ Astrologers are live now </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section bg-bright-gray text-center">
+    <div class="container">
+        <h2 class="fw-semi-bold mb-5">Why Raksha?</h2>
+
+        <p>Unveil the wonders of astrology, unlock your potential, and embark on a profound journey of self-discovery.
+            Raksha is designed to provide you with an enriching and personalized experience, connecting you with expert
+            astrologers who will illuminate your path to a brighter future.</p>
+        <p class="mb-0">Unlock the secrets of the stars and harness the ancient wisdom of astrology with our
+            comprehensive range of features. Connect, converse, and gain clarity on your life's path through our chat,
+            call, and live astrologer services. Your destiny awaits!</p>
+    </div>
+</section>
+
+<section class="section text-center">
+    <div class="container">
+        <h2 class="fw-semi-bold mb-5">What people say?</h2>
+    </div>
+
+    <div class="container-fluid gx-0">
+        <owl-carousel-o [options]="testimonialOwlOptions">
+            <ng-container *ngFor="let testimonial of testimonials">
+                <ng-template carouselSlide [id]="testimonial['_id'].toString()">
+                    <div class="card testimonial">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0 me-3">
+                                    <img class="avatar-sm" [src]="testimonial['avatar']" [alt]="testimonial['_id']"
+                                        [title]="testimonial['userName']">
+                                </div>
+                                <div class="flex-grow-1 text-start overflow-hidden">
+                                    <p class="fw-semi-bold mb-1">{{testimonial['userName']}}, {{testimonial['age']}}</p>
+                                    <p class="text-muted mb-0">{{testimonial['address']}}</p>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="mb-0">{{testimonial['message']}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ng-container>
+        </owl-carousel-o>
+    </div>
+</section>
+
+<section class="section text-center">
+    <div class="container">
+        <h2 class="fw-semi-bold mb-5">Featured Astrologers</h2>
+
+        <div class="row">
+            <ng-container *ngFor="let astrologer of astrologers;">
+                <div class="col-xl col-lg-6">
+                    <div class="card astrologer featured text-center">
+                        <div class="card-body">
+                            <img class="avatar-lg rounded-circle" src="{{astrologer['avatar']}}">
+                            <h3 class="fw-semi-bold mb-0">{{astrologer['astrologerName']}}</h3>
+                            <p class="mb-0">{{astrologer['experience']}}</p>
+
+                            <div class="tags">
+                                <h5 class="text-muted mb-2">{{astrologer['tags']}}</h5>
+                            </div>
+
+                            <div class="session mt-1">
+                                <button class="btn btn-white">Chat Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,43 @@
+// scss-docs-start color-variables
+$violet: #281759;
+$indigo: #7000ff;
+$phlox: #d700ff;
+$black: #000000;
+$white: #ffffff;
+$silver: #7e8797;
+$gray: #d0d6d9;
+$bright-gray: #e6eaeb;
+$red: #d90505;
+$green: #05b761;
+
+// scss-docs-start colors-map
+$colors: (
+  "violet": $violet,
+  "indigo": $indigo,
+  "phlox": $phlox,
+  "black": $black,
+  "white": $white,
+  "silver": $silver,
+  "gray": $gray,
+  "bright-gray": $bright-gray,
+  "red": $red,
+  "green": $green,
+);
+
+// scss-docs-start theme-color-variables
+$primary: $violet;
+$secondary: $indigo;
+
+// scss-docs-start theme-colors-map.
+
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+);
+
+$font-primary: "Poppins", Arial, sans-serif;
+
+$heading: 1.5rem;
+$info-heading: 1.25rem;
+$sub-heading: 1rem;
+$form-fields-size: 0.875rem;

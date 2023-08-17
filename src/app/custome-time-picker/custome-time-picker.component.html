@@ -1,0 +1,12 @@
+<ngb-timepicker
+  [formControl]="ctrl"
+  [spinners]="false"
+  required
+  [seconds]="true"
+  [ngModel]="time"
+  (ngModelChange)="updateTime($event)"
+></ngb-timepicker>
+<div *ngIf="ctrl.errors" class="small form-text text-danger">
+  <div *ngIf="ctrl.errors['hourError']">valid value Please</div>
+  <div *ngIf="ctrl.errors['tooEarly']">It's a bit too early</div>
+</div>
