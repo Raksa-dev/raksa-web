@@ -1,7 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomeTimePickerComponent } from '../../custome-time-picker/custome-time-picker.component';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+
+import { HttpClient } from '@angular/common/http';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -24,6 +40,7 @@ import {
   signInWithPhoneNumber,
   getAdditionalUserInfo,
 } from '@angular/fire/auth';
+import { Observable, Subject, concat, of, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -53,7 +70,16 @@ export class LoginComponent implements OnInit {
   public formStep: number = 1;
   public loading: boolean = false;
 
-  public signUpForm!: FormGroup;
+  public signUpForm: FormGroup = this.formBuilder.group({
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    gender: [null, [Validators.required]],
+    dateOfBirth: [null, [Validators.required]],
+    birthTime: [null, [Validators.required]],
+    birthPlace: ['', [Validators.required]],
+    maritialStatus: [null, [Validators.required]],
+    isAstrologer: [null, [Validators.required]],
+  });
   public signUpFormSubmitted: boolean = false;
 
   public phoneForm!: FormGroup;
@@ -67,27 +93,72 @@ export class LoginComponent implements OnInit {
 
   public phoneNumber: string;
 
+  options: any[] = [];
+
+  movies$: Observable<any>;
+  moviesLoading = false;
+  moviesInput$ = new Subject<string>();
+  selectedMovie: any;
+  minLengthTerm = 3;
+
+  trackByFn(item: any) {
+    return item.imdbID;
+  }
+
+  loadMovies() {
+    this.movies$ = // default items
+      this.moviesInput$.pipe(
+        filter((res) => {
+          return res !== null && res.length >= this.minLengthTerm;
+        }),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => (this.moviesLoading = true)),
+        switchMap((term) => {
+          return this.getMovies(term).pipe(
+            catchError(() => of([])), // empty list on error
+            tap(() => (this.moviesLoading = false))
+          );
+        })
+      );
+  }
+
+  getMovies(term: string = null): Observable<any> {
+    const httpOptions = {
+      headers: {
+        'X-RapidAPI-Key': 'caeb00ca62msh82e7ceb1a80bcabp142705jsnc0b4069afb3e',
+        'X-RapidAPI-Host': 'place-autocomplete1.p.rapidapi.com',
+      },
+      params: { input: term, radius: '500' },
+    };
+    return this.http
+      .get<any>(
+        `https://place-autocomplete1.p.rapidapi.com/autocomplete/json`,
+        httpOptions
+      )
+      .pipe(
+        map((resp) => {
+          if (resp.Error) {
+            throwError(resp.Error);
+          } else {
+            return resp.predictions;
+          }
+        })
+      );
+  }
+
   constructor(
     private auth: Auth,
     public authService: AuthService,
     public userService: UserService,
     public windowRefService: WindowRefService,
     public activeModal: NgbActiveModal,
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    this.signUpForm = this.formBuilder.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      gender: [null, [Validators.required]],
-      dateOfBirth: [null, [Validators.required]],
-      birthTime: [null, [Validators.required]],
-      birthPlace: ['', [Validators.required]],
-      maritialStatus: [null, [Validators.required]],
-      isAstrologer: [null, [Validators.required]],
-    });
-
+    this.loadMovies();
     this.phoneForm = this.formBuilder.group({
       phoneNumber: [null, [Validators.required]],
       acceptTerms: [false, [Validators.requiredTrue]],
@@ -116,6 +187,39 @@ export class LoginComponent implements OnInit {
   }
   get signUpFrm() {
     return this.signUpForm.controls;
+  }
+
+  search = (text$: any) => {
+    console.log('this isn ciool');
+    return text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((searchText) => {
+        console.log('this is serach text', searchText);
+        const httpOptions = {
+          headers: {
+            'X-RapidAPI-Key':
+              'caeb00ca62msh82e7ceb1a80bcabp142705jsnc0b4069afb3e',
+            'X-RapidAPI-Host': 'place-autocomplete1.p.rapidapi.com',
+          },
+          params: { input: 'new', radius: '500' },
+        };
+        return this.http.get<any[]>(
+          `https://place-autocomplete1.p.rapidapi.com/autocomplete/json`,
+          httpOptions
+        );
+      }),
+      tap((data) => {
+        console.log('this is data in tap :', data);
+        this.options = [data]; // Update options array with data from API response
+      })
+    );
+  };
+
+  searchMaster(text: string) {
+    console.log('this is text :', text);
+    this.options = ['nice'];
+    return this.http.get<any[]>(`YOUR_API_URL?q=${text}`);
   }
 
   sendLoginCode(): void {
@@ -227,7 +331,7 @@ export class LoginComponent implements OnInit {
     );
     formValues['isAstrologer'] =
       formValues['isAstrologer'] == 'true' ? true : false;
-
+    formValues['birthPlace'] = formValues['birthPlace'].description;
 
     this.userService
       .CreateUser(formValues)

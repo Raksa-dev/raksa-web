@@ -205,27 +205,32 @@
               </div>
             </div>
 
+            <!-- birth place -->
             <div class="mb-2">
-              <label for="lastName" class="form-fields-label"
+              <label for="birthPlace" class="form-fields-label"
                 >Birth Place</label
               >
-              <input
-                type="text"
-                id="birthPlace"
+              <ng-select
+                [items]="movies$ | async"
+                bindLabel="description"
+                [trackByFn]="trackByFn"
+                [minTermLength]="minLengthTerm"
+                [loading]="moviesLoading"
+                typeToSearchText="Please enter {{
+                  minLengthTerm
+                }} or more characters"
+                [typeahead]="moviesInput$"
+                [(ngModel)]="selectedMovie"
+                [ngModelOptions]="{ standalone: true }"
                 formControlName="birthPlace"
-                class="form-control"
-                [ngClass]="{
-                  'is-invalid':
-                    signUpFormSubmitted && signUpFrm['birthPlace'].errors
-                }"
-                placeholder="Enter your birth place"
-              />
+              >
+              </ng-select>
               <div
                 *ngIf="profileSubmitted && signUpFrm['birthPlace'].errors"
                 class="invalid-feedback"
               >
                 <span *ngIf="signUpFrm['birthPlace'].errors['required']"
-                  >Last Name can't be empty</span
+                  >Birth Place can't be empty</span
                 >
               </div>
             </div>

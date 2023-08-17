@@ -22,6 +22,7 @@ import { LoginComponent } from './shared/login/login.component';
 import { CustomeTimePickerComponent } from './custome-time-picker/custome-time-picker.component';
 
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 // Firebase
 // import { AngularFireModule } from '@angular/fire/compat';
@@ -51,6 +52,7 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     NgbTimepickerModule,
     CustomeTimePickerComponent,
+    HttpClientModule,
 
     // AngularFireModule.initializeApp(environment.firebaseConfig),
     // AngularFirestoreModule,
