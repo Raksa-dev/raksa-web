@@ -20,11 +20,11 @@ import {
 } from 'rxjs/operators';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  SearchCountryField,
-  CountryISO,
-  PhoneNumberFormat,
-} from 'ngx-intl-tel-input';
+// import {
+//   SearchCountryField,
+//   CountryISO,
+//   PhoneNumberFormat,
+// } from 'ngx-intl-tel-input';
 
 import { NgOtpInputConfig } from 'ng-otp-input';
 import {
@@ -48,13 +48,13 @@ import { Observable, Subject, concat, of, throwError } from 'rxjs';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public SearchCountryField = SearchCountryField;
-  public CountryISO = CountryISO;
-  public PhoneNumberFormat = PhoneNumberFormat;
-  public preferredCountries: CountryISO[] = [
-    CountryISO.India,
-    CountryISO.UnitedStates,
-  ];
+  // public SearchCountryField = SearchCountryField;
+  // public CountryISO = CountryISO;
+  // public PhoneNumberFormat = PhoneNumberFormat;
+  // public preferredCountries: CountryISO[] = [
+  //   CountryISO.India,
+  //   CountryISO.UnitedStates,
+  // ];
 
   public otpInputConfig: NgOtpInputConfig = {
     length: 6,
@@ -243,11 +243,7 @@ export class LoginComponent implements OnInit {
     let formValues = this.phoneForm.value;
     const appVerifier = this.windowRef.recaptchaVerifier;
 
-    signInWithPhoneNumber(
-      this.auth,
-      formValues['phoneNumber'].e164Number,
-      appVerifier
-    )
+    signInWithPhoneNumber(this.auth, formValues['phoneNumber'], appVerifier)
       .then((result: any) => {
         this.windowRef.confirmationResult = result;
 
