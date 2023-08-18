@@ -13,7 +13,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-// import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { NgOtpInputModule } from 'ng-otp-input';
 
 import { AppComponent } from './app.component';
@@ -47,7 +47,7 @@ import { environment } from '../environments/environment';
     NgbNavModule,
     NgbDatepickerModule,
     NgSelectModule,
-    // NgxIntlTelInputModule,
+    NgxIntlTelInputModule,
     NgOtpInputModule,
     AppRoutingModule,
     NgbTimepickerModule,

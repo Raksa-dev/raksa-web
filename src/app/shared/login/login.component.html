@@ -319,17 +319,8 @@
           >
             <div class="mb-4">
               <label for="phoneNumber" class="form-label">Mobile Number</label>
-              <input
-                type="text"
-                id="phoneNumber"
-                formControlName="phoneNumber"
-                class="form-control"
-                [ngClass]="{
-                  'is-invalid': phoneSubmitted && phoneFrm['phoneNumber'].errors
-                }"
-                placeholder="Enter your contact number"
-              />
-              <!-- <ngx-intl-tel-input
+
+              <ngx-intl-tel-input
                 [cssClass]="'form-control'"
                 [ngClass]="{
                   'is-invalid': phoneSubmitted && phoneFrm['phoneNumber'].errors
@@ -356,7 +347,7 @@
                 formControlName="phoneNumber"
                 customPlaceholder="Enter your contact number"
               >
-              </ngx-intl-tel-input> -->
+              </ngx-intl-tel-input>
 
               <div
                 *ngIf="phoneSubmitted && phoneFrm['phoneNumber'].errors"

@@ -20,11 +20,11 @@ import {
 } from 'rxjs/operators';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-// import {
-//   SearchCountryField,
-//   CountryISO,
-//   PhoneNumberFormat,
-// } from 'ngx-intl-tel-input';
+import {
+  SearchCountryField,
+  CountryISO,
+  PhoneNumberFormat,
+} from 'ngx-intl-tel-input';
 
 import { NgOtpInputConfig } from 'ng-otp-input';
 import {
@@ -48,13 +48,13 @@ import { Observable, Subject, concat, of, throwError } from 'rxjs';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  // public SearchCountryField = SearchCountryField;
-  // public CountryISO = CountryISO;
-  // public PhoneNumberFormat = PhoneNumberFormat;
-  // public preferredCountries: CountryISO[] = [
-  //   CountryISO.India,
-  //   CountryISO.UnitedStates,
-  // ];
+  public SearchCountryField = SearchCountryField;
+  public CountryISO = CountryISO;
+  public PhoneNumberFormat = PhoneNumberFormat;
+  public preferredCountries: CountryISO[] = [
+    CountryISO.India,
+    CountryISO.UnitedStates,
+  ];
 
   public otpInputConfig: NgOtpInputConfig = {
     length: 6,
@@ -190,7 +190,6 @@ export class LoginComponent implements OnInit {
   }
 
   search = (text$: any) => {
-    console.log('this isn ciool');
     return text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
@@ -217,7 +216,6 @@ export class LoginComponent implements OnInit {
   };
 
   searchMaster(text: string) {
-    console.log('this is text :', text);
     this.options = ['nice'];
     return this.http.get<any[]>(`YOUR_API_URL?q=${text}`);
   }
@@ -243,7 +241,11 @@ export class LoginComponent implements OnInit {
     let formValues = this.phoneForm.value;
     const appVerifier = this.windowRef.recaptchaVerifier;
 
-    signInWithPhoneNumber(this.auth, formValues['phoneNumber'], appVerifier)
+    signInWithPhoneNumber(
+      this.auth,
+      formValues['phoneNumber'].e164Number,
+      appVerifier
+    )
       .then((result: any) => {
         this.windowRef.confirmationResult = result;
 
@@ -267,8 +269,6 @@ export class LoginComponent implements OnInit {
         this.formStep = 2;
       })
       .catch((error: any) => {
-        console.log('this is error sign in with phone number:', error);
-
         this.loading = false;
         console.log(error);
       });
@@ -285,8 +285,6 @@ export class LoginComponent implements OnInit {
   }
 
   verifyLoginCode(): void {
-    console.log('this is triggered');
-
     this.otpSubmitted = true;
 
     if (this.otpForm.invalid) {
@@ -354,15 +352,10 @@ export class LoginComponent implements OnInit {
       formValues['dateOfBirth'].month - 1,
       formValues['dateOfBirth'].day
     );
-    console.log(
-      'this is user console logs :',
-      this.authService.activeUserValue
-    );
 
     this.userService
       .CreateUser(formValues)
       .then((data) => {
-        console.log('this is data:,', data);
         this.activeModal.close({ response: true });
       })
       .catch((error: any) => {
