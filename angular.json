@@ -33,12 +33,6 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.production.ts"
-                }
-              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -69,8 +63,12 @@
           "configurations": {
             "production": {
               "browserTarget": "Raksa:build:production"
+            },
+            "development": {
+              "browserTarget": "Raksa:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
