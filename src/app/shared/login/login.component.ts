@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { HttpClient } from '@angular/common/http';
 import {
@@ -15,7 +10,6 @@ import {
   filter,
   map,
   switchMap,
-  take,
   tap,
 } from 'rxjs/operators';
 
@@ -82,6 +76,19 @@ export class LoginComponent implements OnInit {
   });
   public signUpFormSubmitted: boolean = false;
 
+  public relativeForm: FormGroup = this.formBuilder.group({
+    relation: [null, [Validators.required]],
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    gender: [null, [Validators.required]],
+    dateOfBirth: [null, [Validators.required]],
+    birthTime: [null, [Validators.required]],
+    birthPlace: ['', [Validators.required]],
+    maritialStatus: [null, [Validators.required]],
+  });
+  public relativeSubmitted: boolean = false;
+  private relativeData: any = {};
+
   public phoneForm!: FormGroup;
   public phoneSubmitted: boolean = false;
 
@@ -93,6 +100,8 @@ export class LoginComponent implements OnInit {
 
   public phoneNumber: string;
 
+  public addedMembers: number = 0;
+
   options: any[] = [];
 
   movies$: Observable<any>;
@@ -100,6 +109,36 @@ export class LoginComponent implements OnInit {
   moviesInput$ = new Subject<string>();
   selectedMovie: any;
   minLengthTerm = 3;
+
+  constructor(
+    private auth: Auth,
+    public authService: AuthService,
+    public userService: UserService,
+    public windowRefService: WindowRefService,
+    public activeModal: NgbActiveModal,
+    public formBuilder: FormBuilder,
+    private http: HttpClient
+  ) {}
+
+  ngOnInit(): void {
+    this.loadMovies();
+    this.phoneForm = this.formBuilder.group({
+      phoneNumber: [null, [Validators.required]],
+      acceptTerms: [false, [Validators.requiredTrue]],
+    });
+
+    this.otpForm = this.formBuilder.group({
+      verificationCode: [null, [Validators.required, Validators.minLength(6)]],
+    });
+
+    this.profileForm = this.formBuilder.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      gender: ['', [Validators.required]],
+      dateOfBirth: [null, [Validators.required]],
+    });
+    localStorage.removeItem('user-sign-up-data');
+  }
 
   trackByFn(item: any) {
     return item.imdbID;
@@ -147,35 +186,6 @@ export class LoginComponent implements OnInit {
       );
   }
 
-  constructor(
-    private auth: Auth,
-    public authService: AuthService,
-    public userService: UserService,
-    public windowRefService: WindowRefService,
-    public activeModal: NgbActiveModal,
-    public formBuilder: FormBuilder,
-    private http: HttpClient
-  ) {}
-
-  ngOnInit(): void {
-    this.loadMovies();
-    this.phoneForm = this.formBuilder.group({
-      phoneNumber: [null, [Validators.required]],
-      acceptTerms: [false, [Validators.requiredTrue]],
-    });
-
-    this.otpForm = this.formBuilder.group({
-      verificationCode: [null, [Validators.required, Validators.minLength(6)]],
-    });
-
-    this.profileForm = this.formBuilder.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      gender: ['', [Validators.required]],
-      dateOfBirth: [null, [Validators.required]],
-    });
-  }
-
   get phoneFrm() {
     return this.phoneForm.controls;
   }
@@ -187,6 +197,10 @@ export class LoginComponent implements OnInit {
   }
   get signUpFrm() {
     return this.signUpForm.controls;
+  }
+
+  get relativeFrm() {
+    return this.relativeForm.controls;
   }
 
   search = (text$: any) => {
@@ -214,11 +228,6 @@ export class LoginComponent implements OnInit {
       })
     );
   };
-
-  searchMaster(text: string) {
-    this.options = ['nice'];
-    return this.http.get<any[]>(`YOUR_API_URL?q=${text}`);
-  }
 
   sendLoginCode(): void {
     this.phoneSubmitted = true;
@@ -274,16 +283,6 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  // not using
-  submitSignUp(): void {
-    this.signUpFormSubmitted = true;
-    if (this.signUpForm.invalid) {
-      return;
-    }
-
-    let formValues = this.signUpForm.value;
-  }
-
   verifyLoginCode(): void {
     this.otpSubmitted = true;
 
@@ -309,14 +308,87 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  showAddMembersForm(): void {
+    this.formStep = 4;
+    localStorage.setItem(
+      'user-sign-up-data',
+      JSON.stringify(this.signUpForm?.value)
+    );
+  }
+  goBackToSignUp(): void {
+    let data = JSON.parse(localStorage.getItem('user-sign-up-data')!);
+    this.signUpForm.patchValue(data);
+    this.formStep = 3;
+    this.relativeForm.reset();
+  }
+
+  submitRelativeForm(): void {
+    this.relativeSubmitted = true;
+    if (this.relativeForm.invalid) {
+      return;
+    }
+    let formValues = this.relativeForm.value;
+
+    formValues['dateOfBirth'] = new Date(
+      formValues['dateOfBirth'].year,
+      formValues['dateOfBirth'].month - 1,
+      formValues['dateOfBirth'].day
+    );
+    formValues['birthPlace'] = formValues['birthPlace'].description;
+    // format birthtime
+    const hour = formValues['birthTime']?.hour?.toString().padStart(2, '0');
+    const minute = formValues['birthTime']?.minute?.toString().padStart(2, '0');
+    const second = formValues['birthTime']?.second?.toString().padStart(2, '0');
+    const formattedTime = `${hour}:${minute}:${second} ${
+      formValues['birthTime']?.hour >= 12 ? 'PM' : 'AM'
+    }`;
+    //////////////////
+    formValues['birthTime'] = formattedTime;
+
+    let relativeDataArray =
+      JSON.parse(localStorage.getItem('relative-data')!) || [];
+
+    if (relativeDataArray.length) {
+      relativeDataArray.push(formValues);
+    } else {
+      relativeDataArray = [formValues];
+    }
+    this.addedMembers = relativeDataArray.length;
+    localStorage.setItem('relative-data', JSON.stringify(relativeDataArray));
+    this.formStep = 3;
+    this.relativeSubmitted = false;
+    let data = JSON.parse(localStorage.getItem('user-sign-up-data')!);
+    this.signUpForm.patchValue(data);
+    this.relativeForm.reset();
+
+    // console.log('these are valuesin relatinve form:::::', formValues);
+
+    // formValues['uid'] = this.authService.activeUserValue['uid'];
+    // formValues['dateOfBirth'] = new Date(
+    //   formValues['dateOfBirth'].year,
+    //   formValues['dateOfBirth'].month - 1,
+    //   formValues['dateOfBirth'].day
+    // );
+    // formValues['isAstrologer'] =
+    //   formValues['isAstrologer'] == 'true' ? true : false;
+    // formValues['birthPlace'] = formValues['birthPlace'].description;
+
+    // this.userService
+    //   .CreateUser(formValues)
+    //   .then((data) => {
+    //     this.activeModal.close({ response: true });
+    //   })
+    //   .catch((error: any) => {
+    //     console.log(error);
+    //   });
+  }
+
   createProfileInRegistration(): void {
     this.signUpFormSubmitted = true;
     if (this.signUpForm.invalid) {
       return;
     }
-
     let formValues = this.signUpForm.value;
-
     formValues['uid'] = this.authService.activeUserValue['uid'];
     formValues['dateOfBirth'] = new Date(
       formValues['dateOfBirth'].year,
@@ -326,10 +398,26 @@ export class LoginComponent implements OnInit {
     formValues['isAstrologer'] =
       formValues['isAstrologer'] == 'true' ? true : false;
     formValues['birthPlace'] = formValues['birthPlace'].description;
+    // format birthtime
+    const hour = formValues['birthTime']?.hour?.toString().padStart(2, '0');
+    const minute = formValues['birthTime']?.minute?.toString().padStart(2, '0');
+    const second = formValues['birthTime']?.second?.toString().padStart(2, '0');
+    const formattedTime = `${hour}:${minute}:${second} ${
+      formValues['birthTime']?.hour >= 12 ? 'PM' : 'AM'
+    }`;
+    //////////////////
+    formValues['birthTime'] = formattedTime;
+    let relativeDataArray =
+      JSON.parse(localStorage.getItem('relative-data')!) || [];
 
+    if (relativeDataArray.length) {
+      formValues['relatives'] = relativeDataArray;
+    }
     this.userService
       .CreateUser(formValues)
       .then((data) => {
+        localStorage.removeItem('user-sign-up-data');
+        this.userService.fetchUserData(this.authService.activeUserValue['uid']);
         this.activeModal.close({ response: true });
       })
       .catch((error: any) => {

@@ -10,6 +10,7 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  arrayUnion,
 } from '@angular/fire/firestore';
 
 @Injectable({
@@ -18,13 +19,38 @@ import {
 export class UserService {
   constructor(private firestore: Firestore) {}
 
-  CreateUser(userData: any): any {
+  private userData;
+
+  get getUserData() {
+    return this.userData;
+  }
+
+  set setUserData(data: any) {
+    this.userData = data;
+  }
+
+  async fetchUserData(userId, authData?) {
+    const userRef = doc(this.firestore, 'users', userId);
+    const data = (await getDoc(userRef)).data();
+    this.userData = { ...data, phoneNumber: authData };
+  }
+  async CreateUser(userData: any): Promise<any> {
     const userRef = doc(this.firestore, 'users', userData.uid);
     return setDoc(userRef, userData);
   }
 
-  UpdateUser(id: string, userData: any): any {
+  async UpdateUser(id: string, userData: any): Promise<any> {
     const userRef = doc(this.firestore, 'users', id);
     return updateDoc(userRef, userData);
+  }
+  async AddRelatives(id: string, userData: any): Promise<any> {
+    const userRef = doc(this.firestore, 'users', id);
+    return setDoc(
+      userRef,
+      { relatives: arrayUnion(userData) },
+      {
+        merge: true,
+      }
+    );
   }
 }

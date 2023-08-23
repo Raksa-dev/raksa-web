@@ -12,8 +12,15 @@
   color: black; /* Set the text color of the selected option */
 }
 
-.select-box option {
-  color: black; /* Set the text color of all options */
+// .select-box option {
+//   color: black; /* Set the text color of all options */
+// }
+
+select option {
+  margin: 40px;
+  background: #230033;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
 }
 
 .gradient-button {
@@ -44,7 +51,28 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.add-relative-btn {
+  height: 1.5rem;
+  font-size: small;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    width: 60%;
+  }
+}
 
+.ng-select .custom {
+  min-height: 0px;
+  border-radius: 0;
+  background: #7000ff;
+}
+
+.back-button {
+  position: absolute;
+  top: 0.5rem;
+  width: 70%;
+}
 // .needs-validation {
 //   background: red;
 

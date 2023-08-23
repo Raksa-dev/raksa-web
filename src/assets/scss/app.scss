@@ -496,6 +496,10 @@ small {
 .modal {
   user-select: none;
 
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
   .modal-content {
     border-radius: 0.5rem;
     background: linear-gradient(

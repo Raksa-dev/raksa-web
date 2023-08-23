@@ -10,6 +10,7 @@ import {
   NgbNavModule,
   NgbDatepickerModule,
   NgbTimepickerModule,
+  NgbAccordionModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -34,9 +35,10 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
+import { ProfileComponent } from './shared/profile/profile.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, ProfileComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -45,6 +47,7 @@ import { environment } from '../environments/environment';
     NgbModule,
     NgbModalModule,
     NgbNavModule,
+    NgbAccordionModule,
     NgbDatepickerModule,
     NgSelectModule,
     NgxIntlTelInputModule,
