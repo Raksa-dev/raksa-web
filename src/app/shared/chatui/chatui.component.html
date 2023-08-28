@@ -1,0 +1,156 @@
+<div class="modal-header mb-5">
+  <div class="chat-header">
+    <!-- Timer goes here -->
+    Timer: {{ formatTime(timer) }}
+  </div>
+  <button
+    type="button"
+    class="btn-close bg-white"
+    aria-label="Close"
+    (click)="openConfirmation()"
+  ></button>
+</div>
+
+<div class="modal-body mb-5" #chatContainer>
+  <div class="container-fluid">
+    <div
+      class="message-box"
+      *ngFor="let message of messages; let index = index"
+    >
+      <!-- reveiving messages -->
+      <div class="receiving">
+        <div
+          [ngClass]="{
+            'display-block': message.senderId == currentUser.uid,
+            'display-none': message.senderId != currentUser.uid
+          }"
+        ></div>
+        <div
+          [ngClass]="{
+            'display-flex': message.senderId != currentUser.uid,
+            'display-none': message.senderId == currentUser.uid
+          }"
+          class="chat-modal"
+        >
+          <div class="profile-pic">
+            <img
+              [src]="message.receiverPhotoUrl"
+              class="pro-pic"
+              *ngIf="message.receiverPhotoUrl"
+            />
+            <div class="your-letter" *ngIf="!message.receiverPhotoUrl">
+              <p>{{ message.receiverName[0] }}</p>
+            </div>
+          </div>
+          <div class="chat-messages">
+            {{ message.text }}
+          </div>
+        </div>
+      </div>
+      <!-- sending messages -->
+      <div class="sending">
+        <div
+          [ngClass]="{
+            'display-none': message.senderId == currentUser.uid,
+            'display-block': message.senderId != currentUser.uid
+          }"
+        ></div>
+        <div
+          [ngClass]="{
+            'display-none': message.senderId != currentUser.uid,
+            'display-flex': message.senderId == currentUser.uid
+          }"
+          class="chat-modal"
+        >
+          <div class="profile-pic">
+            <img
+              [src]="message.senderPhotoUrl"
+              class="pro-pic"
+              *ngIf="message.senderPhotoUrl"
+            />
+            <div class="your-letter" *ngIf="!message.senderPhotoUrl">
+              <p>{{ message.senderName[0] }}</p>
+            </div>
+          </div>
+          <div
+            class="chat-messages chat-message-sender"
+            *ngIf="message.type == 'text'"
+          >
+            {{ message.text }}
+          </div>
+          <div
+            class="chat-messages chat-message-sender image-text"
+            *ngIf="message.type == 'image_text'"
+            (click)="downloadFileFromChat(message)"
+          >
+            <img [src]="message.file_url" alt="Image Preview" width="60" />
+            {{ message.text }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="chat-input">
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      style="display: none"
+      #fileInput
+    />
+    <span
+      (click)="fileInput.click()"
+      class="upload-pic-box gradient-background"
+    >
+      <i class="bx bx-sm bx-paperclip"></i>
+    </span>
+    <textarea
+      class="form-control"
+      [(ngModel)]="messageText"
+      placeholder="Type your message"
+      rows="1"
+    ></textarea>
+    <button class="btn gradient-button" (click)="sendMessage()">Send</button>
+  </div>
+</div>
+
+<div class="overlay-conformation" *ngIf="confirmationOverlay">
+  <div class="position-absolute top-0 end-0">
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      ngbAutofocus
+      aria-label="Close"
+      (click)="closeOverlay()"
+    ></button>
+  </div>
+  <div class="conformation-box" *ngIf="!sendImageInMessage">
+    <p class="confirmation-text">If You Want To End This Chat Click End</p>
+    <div class="confirmation-buttongroup">
+      <button class="btn gradient-button" (click)="continue()">CONTINUE</button>
+      <button class="btn gradient-button" (click)="endChat()">END</button>
+    </div>
+  </div>
+
+  <div class="conformation-box" *ngIf="sendImageInMessage">
+    <div *ngIf="imagePreview">
+      <img [src]="imagePreview" alt="Image Preview" width="300" />
+    </div>
+    <a [href]="imagePreview" *ngIf="downloadFile" target="_blank">
+      <button class="btn gradient-button">Download</button>
+    </a>
+    <div class="confirmation-buttongroup" *ngIf="!downloadFile">
+      <textarea
+        class="form-control"
+        [(ngModel)]="messageText"
+        placeholder="Type your message"
+        rows="1"
+      ></textarea>
+      <button class="btn gradient-button" (click)="sendImageMessage()">
+        Send
+      </button>
+    </div>
+  </div>
+</div>

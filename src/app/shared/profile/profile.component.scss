@@ -26,6 +26,9 @@
 .gradient-background {
   background: linear-gradient(150.77deg, #d700ff 0%, #7000ff 98.92%);
 }
+.user-name {
+  font-size: 2rem;
+}
 .gradient-button {
   background: linear-gradient(
     150.77deg,
@@ -40,9 +43,7 @@
   cursor: pointer;
   transition: background 0.3s ease;
 }
-.user-name {
-  font-size: 2rem;
-}
+
 .gradient-button:hover {
   background: linear-gradient(
     150.77deg,

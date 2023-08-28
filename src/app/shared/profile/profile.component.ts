@@ -39,42 +39,9 @@ export class ProfileComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   private readonly storage: Storage = inject(Storage);
 
-  onFileSelected(event: Event) {
-    const inputElement = this.fileInput.nativeElement;
-    const selectedFile = inputElement.files[0]; // Get the first selected file
-
-    if (selectedFile) {
-      const storageRef = ref(
-        this.storage,
-        '/profilepics/data/webapp/user/' +
-          `${this.currentUser['uid']}/` +
-          selectedFile.name
-      );
-      uploadBytesResumable(storageRef, selectedFile)
-        .then((data) => {
-          getDownloadURL(storageRef).then((data) => {
-            this.userService
-              .UpdateUser(this.authService.activeUserValue['uid'], {
-                profilePicUrl: data,
-              })
-              .then((data) => {
-                this.userService.fetchUserData(
-                  this.userService.getUserData.uid
-                );
-                this.activeModal.close({ response: true });
-              })
-              .catch((error: any) => {
-                console.log(error);
-              });
-          });
-        })
-        .catch((err) => {
-          console.log('this is err :', err);
-        });
-    }
-  }
-
   public currentUser = this.userService.getUserData;
+
+  public uploadProgress = 0;
 
   // Firebase
   public windowRef: any;
@@ -336,6 +303,59 @@ export class ProfileComponent {
       .catch((error: any) => {
         console.log(error);
       });
+  }
+  onFileSelected(event: Event) {
+    const inputElement = this.fileInput.nativeElement;
+    const selectedFile = inputElement.files[0]; // Get the first selected file
+
+    if (selectedFile) {
+      const storageRef = ref(
+        this.storage,
+        '/profilepics/data/webapp/user/' +
+          `${this.currentUser['uid']}/` +
+          selectedFile.name
+      );
+      const task = uploadBytesResumable(storageRef, selectedFile);
+
+      task.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.uploadProgress = progress;
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          console.log('this is an error while uploading file');
+        },
+        () => {
+          getDownloadURL(storageRef).then((data) => {
+            this.userService
+              .UpdateUser(this.authService.activeUserValue['uid'], {
+                profilePicUrl: data,
+              })
+              .then((data) => {
+                this.userService.fetchUserData(
+                  this.userService.getUserData.uid
+                );
+                this.uploadProgress = 0;
+                this.activeModal.close({ response: true });
+              })
+              .catch((error: any) => {
+                console.log(error);
+              });
+          });
+        }
+      );
+    }
   }
 
   onCancel(): void {

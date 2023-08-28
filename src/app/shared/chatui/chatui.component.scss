@@ -1,0 +1,130 @@
+.message-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.chat-modal {
+  margin-bottom: 1rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-modal-sender {
+  margin-bottom: 1rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+.chat-header {
+  /* Style the header with timer */
+}
+
+.chat-messages {
+  /* Style the scrollable messages box */
+  overflow-y: scroll;
+  max-height: 300px;
+  background-color: #4d225b;
+  padding: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.3rem;
+  border-radius: 10px;
+  // z-index: 100;
+  // background-color: #7000ff;
+}
+.chat-message-sender {
+  background-color: #ab55c8;
+}
+
+.chat-input {
+  /* Style the input box and send button */
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.gradient-button {
+  background: linear-gradient(
+    150.77deg,
+    #d700ff 0%,
+    #7000ff 98.92%
+  ); /* Adjust colors as needed */
+
+  color: white;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.gradient-button:hover {
+  background: linear-gradient(
+    150.77deg,
+    #d700ff 0%,
+    #7000ff 80.92%
+  ); /* Reverse the gradient colors on hover */
+}
+
+textarea {
+  width: 100%;
+  max-width: 100%;
+  resize: none; /* Allow vertical resizing */
+  padding: 10px;
+}
+
+.pro-pic {
+  height: 30px !important;
+  width: 30px !important;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.display-block {
+  display: block;
+}
+.display-flex {
+  display: flex;
+  flex-direction: row;
+}
+.display-none {
+  display: none;
+}
+
+.overlay-conformation {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #8a52d3b9;
+  z-index: 10000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.conformation-box {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  display: grid;
+  gap: 10px;
+}
+.confirmation-text {
+  font-weight: 600;
+}
+.confirmation-buttongroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.image-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  word-wrap: break-word;
+}

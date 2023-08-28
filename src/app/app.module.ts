@@ -11,6 +11,7 @@ import {
   NgbDatepickerModule,
   NgbTimepickerModule,
   NgbAccordionModule,
+  NgbProgressbarModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -36,9 +37,15 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { ProfileComponent } from './shared/profile/profile.component';
+import { ChatuiComponent } from './shared/chatui/chatui.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, ProfileComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    ProfileComponent,
+    ChatuiComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
