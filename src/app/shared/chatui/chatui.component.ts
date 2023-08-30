@@ -144,7 +144,7 @@ export class ChatuiComponent implements OnInit, OnDestroy {
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   }
 
-  async sendMessage(type: string = 'text', file_url?: string) {
+  async sendMessage(type: string = 'text', file_url: string = '') {
     try {
       if (this.messageText.trim() !== '') {
         const chatRoomCollection = collection(

@@ -38,6 +38,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { ProfileComponent } from './shared/profile/profile.component';
 import { ChatuiComponent } from './shared/chatui/chatui.component';
+import { CalluiComponent } from './shared/callui/callui.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { ChatuiComponent } from './shared/chatui/chatui.component';
     LoginComponent,
     ProfileComponent,
     ChatuiComponent,
+    CalluiComponent,
   ],
   imports: [
     BrowserModule,

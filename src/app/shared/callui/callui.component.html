@@ -1,0 +1,32 @@
+<div class="modal-header mb-5">
+  <h4 class="modal-title" id="modal-basic-title">Calling</h4>
+  <button
+    type="button"
+    class="btn-close bg-white"
+    aria-label="Close"
+    (click)="onCancel()"
+  ></button>
+</div>
+<div class="modal-body mb-5">
+  <div class="container-fluid">
+    <div class="row d-flex align-content-center justify-content-center">
+      <div class="col-md-7 login-form">
+        <div class="d-flex login-signup"></div>
+        <div class="position-relative">
+          <div id="peers-container"></div>
+          <div ngbAccordion [closeOthers]="true">
+            <button (click)="joinRoom()">Join</button>
+            <button (click)="leaveRoom()">leave</button>
+
+            <div
+              (click)="muteOrUnmute()"
+              class="upload-pic-box gradient-background"
+            >
+              <i class="bx bx-microphone"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
