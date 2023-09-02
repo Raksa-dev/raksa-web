@@ -62,16 +62,48 @@ select option {
   }
 }
 
-.ng-select .custom {
-  min-height: 0px;
-  border-radius: 0;
-  background: #7000ff;
+.ng-select.custom {
+  .ng-dropdown-panel {
+    background: #230033;
+    color: #fff;
+    .ng-option {
+      color: #fff;
+      &.ng-option-selected {
+        color: #ffffffa7;
+      }
+    }
+  }
+}
+.ng-select-multiple {
+  .ng-select-container {
+    .ng-value-container {
+      .ng-value {
+        .ng-star-inserted {
+          background: linear-gradient(150.77deg, #d700ff 0%, #7000ff 80.92%);
+          color: white;
+        }
+      }
+    }
+  }
 }
 
 .back-button {
   position: absolute;
   top: 0.5rem;
   width: 70%;
+}
+
+.upload-photo-id {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  border-radius: 5px;
+  background: transparent;
+  height: 3rem;
+  font-size: 1rem;
+  font-weight: bold;
 }
 // .needs-validation {
 //   background: red;

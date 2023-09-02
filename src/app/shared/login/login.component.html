@@ -912,6 +912,402 @@
               </button>
             </div>
           </form>
+          <!-- Astrologer Screens -->
+          <!-- Astro first personal details -->
+          <form
+            *ngIf="formStep == 8"
+            class="needs-validation"
+            (ngSubmit)="submitAstrologerPersonalForm()"
+            [formGroup]="personalForm"
+            autocomplete="off"
+          >
+            <label
+              for="Sign Up"
+              class="form-heading d-flex justify-content-center"
+              >Personal Details</label
+            >
+
+            <div class="mb-2">
+              <label for="firstName" class="form-fields-label"
+                >First Name</label
+              >
+              <input
+                type="text"
+                id="firstName"
+                formControlName="firstName"
+                class="form-control"
+                placeholder="Enter your first name"
+              />
+              <div
+                *ngIf="profileSubmitted && relativeFrm['firstName'].errors"
+                class="invalid-feedback"
+              >
+                <span *ngIf="relativeFrm['firstName'].errors['required']"
+                  >First Name can't be empty</span
+                >
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label for="lastName" class="form-fields-label">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                formControlName="lastName"
+                class="form-control"
+                placeholder="Enter your first name"
+              />
+              <div
+                *ngIf="profileSubmitted && relativeFrm['lastName'].errors"
+                class="invalid-feedback"
+              >
+                <span *ngIf="relativeFrm['lastName'].errors['required']"
+                  >Last Name can't be empty</span
+                >
+              </div>
+            </div>
+            <div class="mb-2">
+              <label for="gender" class="form-fields-label">Gender</label>
+              <select
+                id="gender"
+                formControlName="gender"
+                class="form-control-select-box select-box"
+                [ngClass]="{
+                  'is-invalid':
+                    relativeSubmitted && relativeFrm['gender'].errors
+                }"
+              >
+                <option value="null" disabled selected>
+                  Select your gender
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">other</option>
+              </select>
+              <div
+                *ngIf="profileSubmitted && relativeFrm['gender'].errors"
+                class="invalid-feedback"
+              >
+                <span *ngIf="relativeFrm['gender'].errors['required']"
+                  >Gender can't be empty</span
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-8">
+                <div class="mb-2">
+                  <label for="dateOfBirth" class="form-fields-label"
+                    >Birth Date</label
+                  >
+                  <div class="input-group clockpicker mt-1">
+                    <input
+                      ngbDatepicker
+                      readonly
+                      class="form-control"
+                      id="dateOfBirth"
+                      formControlName="dateOfBirth"
+                      #dateOfBirth="ngbDatepicker"
+                      style="font-size: 0.7rem"
+                      [ngClass]="{
+                        'is-invalid':
+                          profileSubmitted && profileFrm['dateOfBirth'].errors
+                      }"
+                    />
+
+                    <div
+                      class="input-group-append"
+                      (click)="dateOfBirth.toggle()"
+                    >
+                      <span class="input-group-text">
+                        <img src="../assets/images/calendar.png" />
+                      </span>
+                    </div>
+
+                    <div
+                      *ngIf="
+                        profileSubmitted && profileFrm['dateOfBirth'].errors
+                      "
+                      class="invalid-feedback"
+                    >
+                      <span *ngIf="profileFrm['dateOfBirth'].errors['required']"
+                        >Date of Birth can't be empty</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="mb-2">
+                  <label for="age" class="form-fields-label">Age</label>
+                  <input
+                    type="number"
+                    id="age"
+                    formControlName="age"
+                    class="form-control"
+                    placeholder="Age"
+                  />
+                  <div
+                    *ngIf="profileSubmitted && relativeFrm['age'].errors"
+                    class="invalid-feedback"
+                  >
+                    <span *ngIf="relativeFrm['age'].errors['required']"
+                      >Age can't be empty</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="aadhar" class="form-fields-label">Aadhar</label>
+              <input
+                type="text"
+                id="aadhar"
+                formControlName="aadhar"
+                class="form-control"
+                placeholder="Enter your Aadhar"
+              />
+              <div
+                *ngIf="profileSubmitted && relativeFrm['firstName'].errors"
+                class="invalid-feedback"
+              >
+                <span *ngIf="relativeFrm['firstName'].errors['required']"
+                  >First Name can't be empty</span
+                >
+              </div>
+            </div>
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              style="display: none"
+              #fileInput
+            />
+            <div class="mb-3" (click)="fileInput.click()">
+              <div class="upload-photo-id">Upload Photo Id</div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button
+                type="submit"
+                id="sign-in-button"
+                class="btn gradient-button"
+                [disabled]="personalForm.invalid"
+              >
+                <span>Next</span>
+                <i
+                  *ngIf="!relativeSubmitted"
+                  class="bx bx-right-arrow-alt align-middle ms-1"
+                ></i>
+                <i
+                  *ngIf="relativeSubmitted"
+                  class="bx bx-loader bx-spin align-middle ms-1"
+                ></i>
+              </button>
+            </div>
+          </form>
+          <!-- Astro Professional details -->
+          <form
+            *ngIf="formStep == 9"
+            class="needs-validation"
+            (ngSubmit)="submitAstrologerProfessionalForm()"
+            [formGroup]="professionalForm"
+            autocomplete="off"
+          >
+            <label
+              for="Sign Up"
+              class="form-heading d-flex justify-content-center"
+              >Professional Details</label
+            >
+            <div class="mb-2">
+              <label for="specialties" class="form-fields-label"
+                >Select Specialties</label
+              >
+              <ng-select
+                [items]="specialtiesOptions"
+                bindLabel="description"
+                [ngModelOptions]="{ standalone: true }"
+                formControlName="specialties"
+                [virtualScroll]="true"
+                class="custom"
+                [multiple]="true"
+              >
+              </ng-select>
+            </div>
+
+            <div class="mb-2">
+              <label for="yearsOfExperience" class="form-fields-label"
+                >Experience</label
+              >
+              <input
+                type="number"
+                id="yearsOfExperience"
+                formControlName="yearsOfExperience"
+                class="form-control"
+                placeholder="Experience In Years"
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-2">
+                  <label for="callChargePerMinute" class="form-fields-label"
+                    >Call Charges</label
+                  >
+                  <input
+                    type="number"
+                    id="callChargePerMinute"
+                    formControlName="callChargePerMinute"
+                    class="form-control"
+                    placeholder="Enter Amount Per Min"
+                  />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-2">
+                  <label for="chatChargePerMinute" class="form-fields-label"
+                    >Chat Charges</label
+                  >
+                  <input
+                    type="number"
+                    id="chatChargePerMinute"
+                    formControlName="chatChargePerMinute"
+                    class="form-control"
+                    placeholder="Enter Amount Per Min"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label for="yearsOfExperience" class="form-fields-label"
+                >About You</label
+              >
+              <textarea
+                formControlName="bio"
+                class="form-control"
+                placeholder="Experience In Years"
+                rows="3"
+              >
+              </textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="languages" class="form-fields-label">Languages</label>
+              <ng-select
+                [items]="languagesOptions"
+                bindLabel="languages"
+                [ngModelOptions]="{ standalone: true }"
+                formControlName="languages"
+                [virtualScroll]="true"
+                class="custom"
+                [multiple]="true"
+              >
+              </ng-select>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <button
+                type="submit"
+                id="sign-in-button"
+                class="btn gradient-button"
+                [disabled]="professionalForm.invalid"
+              >
+                <span>Next</span>
+                <i class="bx bx-right-arrow-alt align-middle ms-1"></i>
+              </button>
+            </div>
+          </form>
+          <!-- Astro Banking Details -->
+          <form
+            *ngIf="formStep == 10"
+            class="needs-validation"
+            (ngSubmit)="submitAstrologerBankForm()"
+            [formGroup]="bankDetailsForm"
+            autocomplete="off"
+          >
+            <label
+              for="Sign Up"
+              class="form-heading d-flex justify-content-center"
+              >Banking Details</label
+            >
+
+            <div class="mb-2">
+              <label for="accountName" class="form-fields-label"
+                >Account Name</label
+              >
+              <input
+                type="text"
+                id="accountName"
+                formControlName="accountName"
+                class="form-control"
+                placeholder="Enter your first name"
+              />
+            </div>
+            <div class="mb-2">
+              <label for="bank" class="form-fields-label">Select Bank</label>
+              <select
+                id="bank"
+                formControlName="bank"
+                class="form-control-select-box select-box"
+              >
+                <option value="null" disabled selected>Select Your Bank</option>
+                <option value="father">Kotak</option>
+                <option value="mother">Hdfc</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label for="accountNumber" class="form-fields-label"
+                >Account Number</label
+              >
+              <input
+                type="text"
+                id="accountNumber"
+                formControlName="accountNumber"
+                class="form-control"
+                placeholder="Enter your account number"
+              />
+            </div>
+            <div class="mb-2">
+              <label for="ifscCode" class="form-fields-label">IFSC Code</label>
+              <input
+                type="text"
+                id="ifscCode"
+                formControlName="ifscCode"
+                class="form-control"
+                placeholder="Enter your first name"
+              />
+            </div>
+            <div class="mb-2">
+              <label for="upiId" class="form-fields-label"
+                >UPI ID (Optional)</label
+              >
+              <input
+                type="text"
+                id="upiId"
+                formControlName="upiId"
+                class="form-control"
+                placeholder="Enter your first name"
+              />
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <button
+                type="submit"
+                id="sign-in-button"
+                class="btn gradient-button"
+                [disabled]="bankDetailsForm.invalid"
+              >
+                <span>Submit</span>
+                <i
+                  *ngIf="!relativeSubmitted"
+                  class="bx bx-right-arrow-alt align-middle ms-1"
+                ></i>
+                <i
+                  *ngIf="relativeSubmitted"
+                  class="bx bx-loader bx-spin align-middle ms-1"
+                ></i>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

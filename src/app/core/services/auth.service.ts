@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Auth, onAuthStateChanged, signOut } from '@angular/fire/auth';
 import { UserService } from './user.service';
-
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
@@ -15,7 +15,12 @@ export class AuthService {
     return this.activeUserSubject.value;
   }
 
-  constructor(private auth: Auth, public userService: UserService) {
+
+  constructor(
+    private auth: Auth,
+    public userService: UserService,
+    public router: Router
+  ) {
     this.activeUserSubject = new BehaviorSubject(
       JSON.parse(localStorage.getItem('raksa-user')!)
     );
@@ -23,9 +28,10 @@ export class AuthService {
 
     onAuthStateChanged(this.auth, (user: any) => {
       if (user) {
-        this.activeUserSubject.next(user);
         localStorage.setItem('raksa-user', JSON.stringify(user));
-        userService.fetchUserData(user?.uid);
+        this.activeUserSubject.next(user);
+
+        this.userService.fetchUserData(user?.uid);
       } else {
         this.activeUserSubject.next(null);
         localStorage.removeItem('raksa-user');
@@ -37,6 +43,7 @@ export class AuthService {
     signOut(this.auth)
       .then(() => {
         console.log('User signed out successfully!');
+        this.router.navigateByUrl('/');
       })
       .catch((error) => {
         console.log(error);

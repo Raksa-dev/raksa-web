@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+  inject,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { HttpClient } from '@angular/common/http';
@@ -35,13 +41,25 @@ import {
   getAdditionalUserInfo,
 } from '@angular/fire/auth';
 import { Observable, Subject, concat, of, throwError } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@angular/fire/storage';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  private readonly storage: Storage = inject(Storage);
+
   public SearchCountryField = SearchCountryField;
   public CountryISO = CountryISO;
   public PhoneNumberFormat = PhoneNumberFormat;
@@ -86,6 +104,34 @@ export class LoginComponent implements OnInit {
     birthPlace: ['', [Validators.required]],
     maritialStatus: [null, [Validators.required]],
   });
+
+  public personalForm: FormGroup = this.formBuilder.group({
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    gender: [null, [Validators.required]],
+    dateOfBirth: [null, [Validators.required]],
+    age: [null, [Validators.required]],
+    aadhar: [null, [Validators.required]],
+    uploadedImage: [null, [Validators.required]],
+  });
+
+  public professionalForm: FormGroup = this.formBuilder.group({
+    specialties: [null, [Validators.required]],
+    yearsOfExperience: [null, [Validators.required]],
+    callChargePerMinute: [null, [Validators.required]],
+    chatChargePerMinute: [null, [Validators.required]],
+    bio: ['', [Validators.required]],
+    languages: [null, [Validators.required]],
+  });
+
+  public bankDetailsForm: FormGroup = this.formBuilder.group({
+    accountName: [null, [Validators.required]],
+    bank: [null, [Validators.required]],
+    accountNumber: [null, [Validators.required]],
+    ifscCode: [null, [Validators.required]],
+    upiId: [''],
+  });
+
   public relativeSubmitted: boolean = false;
   private relativeData: any = {};
 
@@ -104,11 +150,26 @@ export class LoginComponent implements OnInit {
 
   options: any[] = [];
 
+  public currentUser = this.userService.getUserData;
+
   movies$: Observable<any>;
   moviesLoading = false;
   moviesInput$ = new Subject<string>();
   selectedMovie: any;
   minLengthTerm = 3;
+
+  specialtiesOptions = [
+    'Vedic',
+    'Numerology',
+    'Face Reading',
+    'Vaastu',
+    'Meditation',
+    'Match Making',
+    'Career',
+    'Legal',
+  ];
+
+  languagesOptions = ['English', 'Hindi', 'Telgu'];
 
   constructor(
     private auth: Auth,
@@ -117,10 +178,20 @@ export class LoginComponent implements OnInit {
     public windowRefService: WindowRefService,
     public activeModal: NgbActiveModal,
     public formBuilder: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['code'] && params['code'].length == 6) {
+        // this is astrologer
+        this.formStep = 9;
+      } else {
+        // this is for user
+        this.formStep = 1;
+      }
+    });
     this.loadMovies();
     this.phoneForm = this.formBuilder.group({
       phoneNumber: [null, [Validators.required]],
@@ -297,9 +368,34 @@ export class LoginComponent implements OnInit {
       .then((user: any) => {
         const isFirstLogin = getAdditionalUserInfo(user)?.isNewUser;
         if (isFirstLogin) {
-          this.formStep = 3;
+          this.activatedRoute.queryParams.subscribe((params) => {
+            if (params['code'] && params['code'].length == 6) {
+              // this is astrologer
+              this.formStep = 9;
+            } else {
+              // this is for user
+              this.formStep = 3;
+            }
+          });
         } else {
-          this.activeModal.close({ response: true });
+          // if user is logined and check the User Collection Data  then show the creation forms
+          this.userService
+            .getDataFromUserCollection(user?.user?.uid)
+            .then((data) => {
+              if (Object.keys(data).length <= 1 || !data) {
+                this.activatedRoute.queryParams.subscribe((params) => {
+                  if (params['code'] && params['code'].length == 6) {
+                    // this is astrologer
+                    this.formStep = 8;
+                  } else {
+                    // this is for user
+                    this.formStep = 3;
+                  }
+                });
+              } else {
+                this.activeModal.close({ response: true });
+              }
+            });
         }
         this.loading = false;
       })
@@ -425,6 +521,40 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  submitAstrologerPersonalForm(): void {
+    let formValues = this.personalForm.value;
+    this.formStep = 9;
+    localStorage.setItem(
+      'astrologer-personal-form',
+      JSON.stringify(formValues)
+    );
+  }
+  submitAstrologerProfessionalForm(): void {
+    let formValues = this.professionalForm.value;
+    this.formStep = 10;
+    localStorage.setItem(
+      'astrologer-professioal-form',
+      JSON.stringify(formValues)
+    );
+    // this.formStep = 10;
+    // localStorage.setItem(
+    //   'astrologer-professional-form',
+    //   JSON.stringify(formValues)
+    // );
+  }
+  submitAstrologerBankForm(): void {
+    let formValues = this.bankDetailsForm.value;
+    localStorage.setItem(
+      'astrologer-professioal-form',
+      JSON.stringify(formValues)
+    );
+    // this.formStep = 10;
+    // localStorage.setItem(
+    //   'astrologer-professional-form',
+    //   JSON.stringify(formValues)
+    // );
+  }
+
   createProfile(): void {
     this.profileSubmitted = true;
 
@@ -451,6 +581,60 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  onFileSelected(event: Event) {
+    const inputElement = this.fileInput.nativeElement;
+    const selectedFile = inputElement.files[0]; // Get the first selected file
+
+    if (selectedFile) {
+      const storageRef = ref(
+        this.storage,
+        '/astrolger/data/webapp/user/' + `qazzxcdaq/` + selectedFile.name
+      );
+      const task = uploadBytesResumable(storageRef, selectedFile);
+
+      task.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // this.uploadProgress = progress;
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          console.log('this is an error while uploading file');
+        },
+        () => {
+          getDownloadURL(storageRef).then((data) => {
+            this.personalForm.patchValue({
+              uploadedImage: data,
+            });
+            // this.userService
+            //   .UpdateUser(this.authService.activeUserValue['uid'], {
+            //     profilePicUrl: data,
+            //   })
+            //   .then((data) => {
+            //     this.userService.fetchUserData(
+            //       this.userService.getUserData.uid
+            //     );
+            //     // this.uploadProgress = 0;
+            //     this.activeModal.close({ response: true });
+            //   })
+            //   .catch((error: any) => {
+            //     console.log(error);
+            //   });
+          });
+        }
+      );
+    }
+  }
   onCancel(): void {
     this.activeModal.close({ response: false });
   }

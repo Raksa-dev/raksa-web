@@ -888,7 +888,7 @@ small {
 
 .footer {
   padding-top: 4rem;
-  padding-bottom: 4rem;
+  // padding-bottom: 4rem;
   color: $white;
 
   .footer-widget {
@@ -902,6 +902,9 @@ small {
         }
       }
     }
+  }
+  .copy-right {
+    text-align: center;
   }
 }
 

@@ -29,6 +29,13 @@ export class UserService {
     this.userData = data;
   }
 
+  async getDataFromUserCollection(userId, authData?) {
+    const userRef = doc(this.firestore, 'users', userId);
+    const data = (await getDoc(userRef)).data();
+    let allData = { ...data, phoneNumber: authData };
+    return allData;
+  }
+
   async fetchUserData(userId, authData?) {
     const userRef = doc(this.firestore, 'users', userId);
     const data = (await getDoc(userRef)).data();

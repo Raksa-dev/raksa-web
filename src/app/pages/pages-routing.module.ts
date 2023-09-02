@@ -5,7 +5,12 @@ import { HomeComponent } from './home/home.component';
 import { ChatComponent } from './chat/chat.component';
 import { CallComponent } from './call/call.component';
 import { LiveComponent } from './live/live.component';
+import { AdminComponent } from './admin/admin.component';
 import { authGuard } from '../auth/auth.guard';
+import { AboutousComponent } from './aboutous/aboutous.component';
+import { ContactousComponent } from './contactous/contactous.component';
+import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
+import { TermsandconditionsComponent } from './termsandconditions/termsandconditions.component';
 
 const routes: Routes = [
   {
@@ -18,8 +23,24 @@ const routes: Routes = [
     component: ChatComponent,
   },
   {
-    path: 'call',
-    component: CallComponent,
+    path: 'admin',
+    component: AdminComponent,
+  },
+  {
+    path: 'about-ous',
+    component: AboutousComponent,
+  },
+  {
+    path: 'contact-ous',
+    component: ContactousComponent,
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacypolicyComponent,
+  },
+  {
+    path: 'terms-and-conditions',
+    component: TermsandconditionsComponent,
   },
   {
     path: 'live',

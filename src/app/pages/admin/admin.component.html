@@ -1,0 +1,32 @@
+<section class="section">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-5">
+      <div class="d-block">
+        <h2 class="fw-semi-bold mb-2">Admin Pannel</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <ng-container *ngFor="let item of items">
+        <div class="col-xl-3 col-lg-6">
+          <div class="card astrologer text-center">
+            <div class="card-body">
+              <h3 class="fw-semi-bold mb-2">
+                {{ item["itemName"] }}
+              </h3>
+
+              <div class="session mt-1">
+                <button
+                  (click)="showlinkgenerationModal()"
+                  class="btn btn-white"
+                >
+                  Access
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>

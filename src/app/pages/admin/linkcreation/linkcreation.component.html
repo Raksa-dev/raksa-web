@@ -1,0 +1,73 @@
+<div class="modal-header mb-5">
+  <h4 class="modal-title" id="modal-basic-title">Links For Astrologers</h4>
+  <button type="button" class="btn-close bg-white" aria-label="Close"></button>
+</div>
+<div class="modal-body mb-5">
+  <div class="container-fluid">
+    <div class="row d-flex align-content-center justify-content-center">
+      <div>
+        <div class="position-relative">
+          <div class="position-relative">
+            <div ngbAccordion [closeOthers]="true">
+              <!--Generate Link -->
+              <div ngbAccordionItem>
+                <h6 ngbAccordionHeader>
+                  <button ngbAccordionButton>Generate Link</button>
+                </h6>
+                <div ngbAccordionCollapse>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <button
+                        id="sign-in-button"
+                        class="btn gradient-button add-relative-btn mb-5 right-align"
+                        (click)="generateLink()"
+                      >
+                        <span>Generate Link</span>
+                      </button>
+                      <textarea
+                        class="form-control mb-5"
+                        placeholder="Click On Generate Link Button"
+                        rows="1"
+                        [(ngModel)]="link"
+                        readonly
+                        oncopy="return false"
+                        onpaste="return false"
+                      ></textarea>
+                      <button
+                        id="sign-in-button"
+                        class="btn gradient-button"
+                        (click)="copyLink()"
+                      >
+                        <span>Copy Link</span>
+                      </button>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+              <!--Status Of Generated Links -->
+              <div ngbAccordionItem>
+                <h6 ngbAccordionHeader>
+                  <button ngbAccordionButton>Status Of Links</button>
+                </h6>
+                <div ngbAccordionCollapse>
+                  <button
+                    id="sign-in-button"
+                    class="btn gradient-button add-relative-btn mb-5 right-align"
+                  >
+                    <i class="bx bx-user-plus"></i>
+                    <span>Add Members</span>
+                  </button>
+                  <div ngbAccordionBody>
+                    <ng-template>
+                      <div *ngIf="true">NO DATA</div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
