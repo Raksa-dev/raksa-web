@@ -186,7 +186,7 @@ export class LoginComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['code'] && params['code'].length == 6) {
         // this is astrologer
-        this.formStep = 9;
+        this.formStep = 8;
       } else {
         // this is for user
         this.formStep = 1;
@@ -544,10 +544,11 @@ export class LoginComponent implements OnInit {
   }
   submitAstrologerBankForm(): void {
     let formValues = this.bankDetailsForm.value;
-    localStorage.setItem(
-      'astrologer-professioal-form',
-      JSON.stringify(formValues)
-    );
+    // localStorage.setItem(
+    //   'astrologer-professioal-form',
+    //   JSON.stringify(formValues)
+    // );
+    alert('Thanks Yet work On this');
     // this.formStep = 10;
     // localStorage.setItem(
     //   'astrologer-professional-form',
