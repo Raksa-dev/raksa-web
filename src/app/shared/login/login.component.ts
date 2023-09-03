@@ -148,6 +148,8 @@ export class LoginComponent implements OnInit {
 
   public addedMembers: number = 0;
 
+  public uploadProgress = 0;
+
   options: any[] = [];
 
   public currentUser = this.userService.getUserData;
@@ -184,7 +186,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
-      if (params['code'] && params['code'].length == 6) {
+      if (
+        params['code'] &&
+        params['code'].length == 6 &&
+        this.authService.activeUserValue
+      ) {
         // this is astrologer
         this.formStep = 8;
       } else {
@@ -371,7 +377,7 @@ export class LoginComponent implements OnInit {
           this.activatedRoute.queryParams.subscribe((params) => {
             if (params['code'] && params['code'].length == 6) {
               // this is astrologer
-              this.formStep = 9;
+              this.formStep = 8;
             } else {
               // this is for user
               this.formStep = 3;
@@ -528,6 +534,7 @@ export class LoginComponent implements OnInit {
       'astrologer-personal-form',
       JSON.stringify(formValues)
     );
+    this.uploadProgress = 0;
   }
   submitAstrologerProfessionalForm(): void {
     let formValues = this.professionalForm.value;
@@ -585,7 +592,6 @@ export class LoginComponent implements OnInit {
   onFileSelected(event: Event) {
     const inputElement = this.fileInput.nativeElement;
     const selectedFile = inputElement.files[0]; // Get the first selected file
-
     if (selectedFile) {
       const storageRef = ref(
         this.storage,
@@ -598,7 +604,7 @@ export class LoginComponent implements OnInit {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          // this.uploadProgress = progress;
+          this.uploadProgress = progress;
           switch (snapshot.state) {
             case 'paused':
               console.log('Upload is paused');
