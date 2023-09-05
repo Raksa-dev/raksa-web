@@ -399,7 +399,7 @@
               </div>
             </div>
             <!-- family details -->
-            <div ngbAccordionItem>
+            <div *ngIf="!currentUser.isAstrologer" ngbAccordionItem>
               <h6 ngbAccordionHeader>
                 <button ngbAccordionButton (click)="onPanelClick(1)">
                   <i class="bx bx-sm bx-group"></i>Family Details

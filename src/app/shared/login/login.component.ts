@@ -77,6 +77,8 @@ export class LoginComponent implements OnInit {
     inputClass: 'form-control',
   };
 
+  linkCode: string = '';
+
   // Firebase
   public windowRef: any;
   public formStep: number = 1;
@@ -111,7 +113,7 @@ export class LoginComponent implements OnInit {
     gender: [null, [Validators.required]],
     dateOfBirth: [null, [Validators.required]],
     age: [null, [Validators.required]],
-    aadhar: [null, [Validators.required]],
+    aadharNumber: [null, [Validators.required]],
     uploadedImage: [null, [Validators.required]],
   });
 
@@ -193,6 +195,7 @@ export class LoginComponent implements OnInit {
       ) {
         // this is astrologer
         this.formStep = 8;
+        this.linkCode = params['code'];
       } else {
         // this is for user
         this.formStep = 1;
@@ -550,17 +553,36 @@ export class LoginComponent implements OnInit {
     // );
   }
   submitAstrologerBankForm(): void {
-    let formValues = this.bankDetailsForm.value;
-    // localStorage.setItem(
-    //   'astrologer-professioal-form',
-    //   JSON.stringify(formValues)
-    // );
+    let formBankValues = this.bankDetailsForm.value;
+    const astrologer_personal_form = JSON.parse(
+      localStorage.getItem('astrologer-personal-form')
+    );
+
+    const astrologer_professioal_form = JSON.parse(
+      localStorage.getItem('astrologer-professioal-form')
+    );
+
+    astrologer_personal_form['dateOfBirth'] = new Date(
+      astrologer_personal_form['dateOfBirth'].year,
+      astrologer_personal_form['dateOfBirth'].month - 1,
+      astrologer_personal_form['dateOfBirth'].day
+    );
+
+    const mergeAllData = {
+      ...astrologer_personal_form,
+      ...astrologer_professioal_form,
+      ...formBankValues,
+    };
+    this.userService
+      .CreateAstrologer(
+        this.authService.activeUserValue['uid'],
+        mergeAllData,
+        this.linkCode
+      )
+      .then((data) => {
+        console.log('thiis is saved data :', data);
+      });
     alert('Thanks Yet work On this');
-    // this.formStep = 10;
-    // localStorage.setItem(
-    //   'astrologer-professional-form',
-    //   JSON.stringify(formValues)
-    // );
   }
 
   createProfile(): void {

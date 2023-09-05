@@ -1,0 +1,6 @@
+<div class="transaction-continer">
+  <i *ngIf="trasactionStatus" class="bx bx-check-shield successful-icon"></i>
+  <p *ngIf="trasactionStatus">Successful Transaction</p>
+  <i *ngIf="!trasactionStatus" class="bx bx-x-circle try-again-icon"></i>
+  <p *ngIf="!trasactionStatus">Transaction Declined Please Try Again Later</p>
+</div>

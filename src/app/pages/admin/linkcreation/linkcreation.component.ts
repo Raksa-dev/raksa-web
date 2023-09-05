@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { environment } from '../../../../environments/environment';
+import { UserService } from 'src/app/core/services';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-linkcreation',
@@ -7,7 +9,13 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./linkcreation.component.scss'],
 })
 export class LinkcreationComponent {
+  constructor(
+    private userServices: UserService,
+    public activeModal: NgbActiveModal
+  ) {}
+
   link: string = '';
+  code: string = '';
 
   randomString(length, chars) {
     var mask = '';
@@ -21,14 +29,20 @@ export class LinkcreationComponent {
   }
 
   generateLink() {
-    const link =
-      environment.LINK + '/form' + '?code=' + this.randomString(6, 'a#A');
+    let codeGenerate = this.randomString(6, 'a#A');
+    const link = environment.LINK + '?code=' + codeGenerate;
     this.link = link;
+    this.code = codeGenerate;
   }
-  copyLink() {
+  async copyLink() {
     navigator.clipboard.writeText(this.link);
-
+    await this.userServices.AdminLinkCreation(this.code).then((data) => {
+      console.log('thisis added :', data);
+    });
     // Alert the copied text
     alert('Copied the text: ' + this.link);
+  }
+  onCancel(): void {
+    this.activeModal.close({ response: false });
   }
 }

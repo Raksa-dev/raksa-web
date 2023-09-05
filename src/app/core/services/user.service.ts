@@ -8,9 +8,13 @@ import {
   doc,
   getDoc,
   setDoc,
+  addDoc,
   updateDoc,
   deleteDoc,
   arrayUnion,
+  collection,
+  where,
+  query,
 } from '@angular/fire/firestore';
 
 @Injectable({
@@ -39,7 +43,14 @@ export class UserService {
   async fetchUserData(userId, authData?) {
     const userRef = doc(this.firestore, 'users', userId);
     const data = (await getDoc(userRef)).data();
-    this.userData = { ...data, phoneNumber: authData };
+    if (data['isAstrologer']) {
+      // get astolrget data
+      const astroRef = doc(this.firestore, 'astrologers', userId);
+      const astrodata = (await getDoc(astroRef)).data();
+      this.userData = { ...data, astrodata, phoneNumber: authData };
+    } else {
+      this.userData = { ...data, phoneNumber: authData };
+    }
   }
   async CreateUser(userData: any): Promise<any> {
     const userRef = doc(this.firestore, 'users', userData.uid);
@@ -59,5 +70,25 @@ export class UserService {
         merge: true,
       }
     );
+  }
+  async AdminLinkCreation(code: string): Promise<any> {
+    const userRef = collection(this.firestore, 'create_astrologers_form_links');
+    const saveData = await addDoc(userRef, {
+      code,
+      submitted: false,
+    });
+    return saveData;
+  }
+  async CreateAstrologer(userid, data, code): Promise<any> {
+    const astroUserRef = doc(this.firestore, 'users', userid);
+    const astroRef = doc(this.firestore, 'astrologers', userid);
+    const astroLinkRef = doc(
+      this.firestore,
+      'create_astrologers_form_links',
+      code
+    );
+    setDoc(astroUserRef, { isAstrologer: true });
+    setDoc(astroRef, data);
+    return updateDoc(astroLinkRef, { submitted: true });
   }
 }

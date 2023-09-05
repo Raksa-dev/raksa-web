@@ -11,6 +11,7 @@ import { AboutousComponent } from './aboutous/aboutous.component';
 import { ContactousComponent } from './contactous/contactous.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { TermsandconditionsComponent } from './termsandconditions/termsandconditions.component';
+import { TransactionComponent } from './transaction/transaction.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path: 'terms-and-conditions',
     component: TermsandconditionsComponent,
+  },
+  {
+    path: 'transaction',
+    component: TransactionComponent,
   },
   {
     path: 'live',

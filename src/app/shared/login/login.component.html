@@ -42,7 +42,7 @@
           </div> -->
         </div>
         <div class="position-relative">
-          <div class="position-absolute top-0 end-0">
+          <div class="position-absolute top-0 end-0" *ngIf="formStep < 8">
             <button
               type="button"
               class="btn-close btn-close-white"
@@ -1062,19 +1062,11 @@
               <label for="aadhar" class="form-fields-label">Aadhar</label>
               <input
                 type="text"
-                id="aadhar"
-                formControlName="aadhar"
+                id="aadharNumber"
+                formControlName="aadharNumber"
                 class="form-control"
                 placeholder="Enter your Aadhar"
               />
-              <div
-                *ngIf="profileSubmitted && relativeFrm['firstName'].errors"
-                class="invalid-feedback"
-              >
-                <span *ngIf="relativeFrm['firstName'].errors['required']"
-                  >First Name can't be empty</span
-                >
-              </div>
             </div>
             <input
               type="file"

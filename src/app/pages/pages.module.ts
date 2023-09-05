@@ -13,10 +13,11 @@ import { AboutousComponent } from './aboutous/aboutous.component';
 import { ContactousComponent } from './contactous/contactous.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { TermsandconditionsComponent } from './termsandconditions/termsandconditions.component';
+import { TransactionComponent } from './transaction/transaction.component';
 
 
 @NgModule({
-    declarations: [RoutingComponents, AdminComponent, LinkcreationComponent, AboutousComponent, ContactousComponent, PrivacypolicyComponent, TermsandconditionsComponent],
+    declarations: [RoutingComponents, AdminComponent, LinkcreationComponent, AboutousComponent, ContactousComponent, PrivacypolicyComponent, TermsandconditionsComponent, TransactionComponent],
     imports: [
         CommonModule,
         FormsModule, ReactiveFormsModule,
