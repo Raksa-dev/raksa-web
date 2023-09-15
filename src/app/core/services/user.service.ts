@@ -216,8 +216,17 @@ export class UserService {
     return update;
   }
   async GetCcavenuePaymentForm() {
-    return this.http.get('https://raksa.tech/api/request', {
-      responseType: 'text',
-    });
+    return this.http.post(
+      'https://raksa.tech/api/request',
+      {
+        order_id: 'DASKJDNQWJND_userId',
+        amount: 1000,
+        currency: 'INR',
+        language: 'en',
+      },
+      {
+        responseType: 'text',
+      }
+    );
   }
 }

@@ -114,9 +114,9 @@ export class LiveComponent {
   async openPaymentForm() {
     (await this.userService.GetCcavenuePaymentForm()).subscribe(
       (data: string) => {
-        // let child = window.open('about:blank', 'myChild');
-        document.write(data);
-        // child.document.close();
+        let child = window.open('about:blank', 'myChild');
+        child.document.write(data);
+        child.document.close();
       }
     );
   }
