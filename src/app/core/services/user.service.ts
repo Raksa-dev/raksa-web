@@ -216,13 +216,20 @@ export class UserService {
     return update;
   }
   async GetCcavenuePaymentForm() {
+    const oder_ID = 'ASTRO_1694784153561_databaseID';
     return this.http.post(
       'https://raksa.tech/api/request',
       {
-        order_id: 'DASKJDNQWJND_userId',
-        amount: 1000,
-        currency: 'INR',
-        language: 'en',
+        orderParams: {
+          order_id: 'DASKJDNQWJND_userId',
+          amount: 1000,
+          currency: 'INR',
+          language: 'en',
+        },
+        keys: {
+          working_key: '02182BD7D50FAF0553F00BC70A412F8C',
+          access_code: 'AVIA09KI06AB67AIBA',
+        },
       },
       {
         responseType: 'text',
