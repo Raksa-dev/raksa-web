@@ -3,7 +3,7 @@
     <div class="container">
       <a
         class="navbar-brand"
-        routerLink="/"
+        [routerLink]="isAstrologerPage ? ['/astrologer'] : ['/']"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
         data-bs-toggle="collapse"
@@ -27,7 +27,7 @@
 
       <div class="collapse navbar-collapse col" id="mainNavigation">
         <ul class="navbar-nav ms-auto me-lg-4">
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="showThreeNavs">
             <a
               class="nav-link"
               routerLink="/chat"
@@ -37,7 +37,7 @@
               >Chat</a
             >
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="showThreeNavs">
             <a
               class="nav-link"
               routerLink="/call"
@@ -47,7 +47,7 @@
               >Call</a
             >
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="showThreeNavs">
             <a
               class="nav-link"
               routerLink="/live"
@@ -56,6 +56,23 @@
               data-bs-target=".navbar-collapse.show"
               >Live</a
             >
+          </li>
+          <li class="nav-item" *ngIf="showNotificationNavs">
+            <div class="nav-link" (click)="openChatNotiifcations()">
+              <div>Chat Notifications</div>
+              <div class="notificaations">
+                {{ chatNotificaitionArray?.length }}
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item" *ngIf="showNotificationNavs">
+            <div class="nav-link" (click)="openCallNotiifcations()">
+              <div>Call Notifications</div>
+              <div class="notificaations">
+                {{ callNotificaitionArray?.length }}
+              </div>
+            </div>
           </li>
         </ul>
 
@@ -78,6 +95,8 @@
           </button>
           <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
             <a class="dropdown-item" (click)="openProfileModal()"> Profile </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="openWalletModal()"> Wallet </a>
             <div class="dropdown-divider"></div>
             <a
               href="javascript:void(0);"

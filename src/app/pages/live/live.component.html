@@ -1,110 +1,146 @@
 <section class="section">
-    <div class="container">
-        <div class="d-flex align-items-center justify-content-between mb-5">
-            <div class="d-block">
-                <h2 class="fw-semi-bold mb-2">Live Astrologers</h2>
-                <p>1000+ live right now</p>
-            </div>
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between mb-5">
+      <div class="d-block">
+        <h2 class="fw-semi-bold mb-2">Live Astrologers</h2>
+        <p>1000+ live right now</p>
+      </div>
 
-            <button class="btn btn-bordered" type="button" (click)="openFilter(filterModal)">Filters <img src="../../../assets/images/filter.png" class="ms-1"></button>
-        </div>
-
-        <div class="row">
-            <ng-container *ngFor="let astrologer of astrologers;">
-                <div class="col-xl-3 col-lg-6">
-                    <div class="card astrologer text-center">
-                        <div class="card-body">
-                            <div class="status d-flex align-items-center justify-content-between">
-                                <p class="text-start mb-0"><img src="../../../assets/images/live.png"
-                                        class="me-1"><span>Live</span></p>
-                                <p class="text-end mb-0"><img src="../../../assets/images/view.png"
-                                        class="me-1"><span>750</span></p>
-                            </div>
-
-                            <img class="avatar-md rounded-circle mb-2" src="{{astrologer['avatar']}}">
-                            <h3 class="fw-semi-bold mb-2">{{astrologer['astrologerName']}}</h3>
-                            <p class="mb-2">{{astrologer['experience']}}</p>
-
-                            <div class="tags">
-                                <h5 class="text-muted mb-2">{{astrologer['tags']}}</h5>
-                            </div>
-
-                            <div class="reviews">
-                                <h6 class="mb-2">
-                                    <span>{{astrologer['rating']}}</span>
-                                    <img src="../../../assets/images/star.png" class="mx-1">
-                                    <span class="me-1">|</span>
-                                    <span>{{astrologer['reviews']}}+ Reviews</span>
-                                </h6>
-                            </div>
-
-                            <div class="session mt-1">
-                                <button class="btn btn-white">View Now</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-        </div>
+      <button
+        class="btn btn-bordered"
+        type="button"
+        (click)="openFilter(filterModal)"
+      >
+        Filters <img src="../../../assets/images/filter.png" class="ms-1" />
+      </button>
     </div>
+
+    <div class="row">
+      <ng-container *ngFor="let astrologer of astrologers">
+        <div class="col-xl-3 col-lg-6">
+          <div class="card astrologer text-center">
+            <div class="card-body">
+              <div
+                class="status d-flex align-items-center justify-content-between"
+              >
+                <p class="text-start mb-0">
+                  <img
+                    src="../../../assets/images/live.png"
+                    class="me-1"
+                  /><span>Live</span>
+                </p>
+                <p class="text-end mb-0">
+                  <img
+                    src="../../../assets/images/view.png"
+                    class="me-1"
+                  /><span>750</span>
+                </p>
+              </div>
+
+              <img
+                class="avatar-md rounded-circle mb-2"
+                src="{{ astrologer['avatar'] }}"
+              />
+              <h3 class="fw-semi-bold mb-2">
+                {{ astrologer["astrologerName"] }}
+              </h3>
+              <p class="mb-2">{{ astrologer["experience"] }}</p>
+
+              <div class="tags">
+                <h5 class="text-muted mb-2">{{ astrologer["tags"] }}</h5>
+              </div>
+
+              <div class="reviews">
+                <h6 class="mb-2">
+                  <span>{{ astrologer["rating"] }}</span>
+                  <img src="../../../assets/images/star.png" class="mx-1" />
+                  <span class="me-1">|</span>
+                  <span>{{ astrologer["reviews"] }}+ Reviews</span>
+                </h6>
+              </div>
+
+              <div class="session mt-1">
+                <button (click)="openPaymentForm()" class="btn btn-white">
+                  View Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 </section>
 
 <ng-template #filterModal let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title fw-semi-bold" id="modal-basic-title">Filters</h5>
-		<button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  <div class="modal-header">
+    <h5 class="modal-title fw-semi-bold" id="modal-basic-title">Filters</h5>
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex">
+      <div class="flex-shrink-0 border-right py-3">
+        <ul ngbNav #navFilters="ngbNav" class="filter-nav flex-column">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>Sort</a>
+            <ng-template ngbNavContent>
+              <div class="form-check form-check-sm">
+                <input
+                  class="form-check-input me-2"
+                  type="radio"
+                  name="flexRadioDefault"
+                  id="flexRadioDefault1"
+                />
+                <label class="form-check-label" for="flexRadioDefault1">
+                  <span>Formatted Logs</span>
+                </label>
+              </div>
+              <div class="form-check form-check-sm">
+                <input
+                  class="form-check-input me-2"
+                  type="radio"
+                  name="flexRadioDefault"
+                  id="flexRadioDefault2"
+                />
+                <label class="form-check-label" for="flexRadioDefault2">
+                  <span>Raw Inputs</span>
+                </label>
+              </div>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>Consultation Mode</a>
+            <ng-template ngbNavContent> </ng-template>
+          </li>
+          <li [ngbNavItem]="3">
+            <a ngbNavLink>Availability</a>
+          </li>
+          <li [ngbNavItem]="4">
+            <a ngbNavLink>Expertise</a>
+          </li>
+          <li [ngbNavItem]="5">
+            <a ngbNavLink>Experience</a>
+          </li>
+          <li [ngbNavItem]="6">
+            <a ngbNavLink>Languages</a>
+          </li>
+          <li [ngbNavItem]="7">
+            <a ngbNavLink>Ratings</a>
+          </li>
+        </ul>
+      </div>
+      <div class="flex-grow-1 py-3">
+        <div [ngbNavOutlet]="navFilters" class="ms-3"></div>
+      </div>
     </div>
-    <div class="modal-body">
-        <div class="d-flex">
-            <div class="flex-shrink-0 border-right py-3">
-                <ul ngbNav #navFilters="ngbNav" class="filter-nav flex-column">
-                    <li [ngbNavItem]="1">
-                        <a ngbNavLink>Sort</a>
-                        <ng-template ngbNavContent>
-                            <div class="form-check form-check-sm">
-                                <input class="form-check-input me-2" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    <span>Formatted Logs</span>
-                                </label>
-                            </div>
-                            <div class="form-check form-check-sm">
-                                <input class="form-check-input me-2" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    <span>Raw Inputs</span>
-                                </label>
-                            </div>
-                        </ng-template>
-                    </li>
-                    <li [ngbNavItem]="2">
-                        <a ngbNavLink>Consultation Mode</a>
-                        <ng-template ngbNavContent>
-                            
-                        </ng-template>
-                    </li>
-                    <li [ngbNavItem]="3">
-                        <a ngbNavLink>Availability</a>
-                    </li>
-                    <li [ngbNavItem]="4">
-                        <a ngbNavLink>Expertise</a>
-                    </li>
-                    <li [ngbNavItem]="5">
-                        <a ngbNavLink>Experience</a>
-                    </li>
-                    <li [ngbNavItem]="6">
-                        <a ngbNavLink>Languages</a>
-                    </li>
-                    <li [ngbNavItem]="7">
-                        <a ngbNavLink>Ratings</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="flex-grow-1 py-3">
-                <div [ngbNavOutlet]="navFilters" class="ms-3"></div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <a class="me-3" href="javascript:void(0);">Reset</a>
-        <button tyle="button" class="btn btn-white">Apply</button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="me-3" href="javascript:void(0);">Reset</a>
+    <button tyle="button" class="btn btn-white">Apply</button>
+  </div>
 </ng-template>

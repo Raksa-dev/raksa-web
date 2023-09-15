@@ -2,6 +2,12 @@
   <div class="chat-header">
     <!-- Timer goes here -->
     Timer: {{ formatTime(timer) }}
+    <span
+      *ngIf="parentData.userIsAstrologer"
+      (click)="seeUserDetails()"
+      class="userDetails"
+      >User Details</span
+    >
   </div>
   <button
     type="button"
@@ -117,6 +123,7 @@
 </div>
 
 <div class="overlay-conformation" *ngIf="confirmationOverlay">
+  <!-- closing button -->
   <div class="position-absolute top-0 end-0">
     <button
       type="button"
@@ -126,15 +133,16 @@
       (click)="closeOverlay()"
     ></button>
   </div>
-  <div class="conformation-box" *ngIf="!sendImageInMessage">
+  <!-- closing cinfirmation -->
+  <div class="conformation-box" *ngIf="!sendImageInMessage && !openUserData">
     <p class="confirmation-text">If You Want To End This Chat Click End</p>
     <div class="confirmation-buttongroup">
       <button class="btn gradient-button" (click)="continue()">CONTINUE</button>
       <button class="btn gradient-button" (click)="endChat()">END</button>
     </div>
   </div>
-
-  <div class="conformation-box" *ngIf="sendImageInMessage">
+  <!-- send Image section -->
+  <div class="conformation-box" *ngIf="sendImageInMessage && !openUserData">
     <div *ngIf="imagePreview">
       <img [src]="imagePreview" alt="Image Preview" width="300" />
     </div>
@@ -151,6 +159,106 @@
       <button class="btn gradient-button" (click)="sendImageMessage()">
         Send
       </button>
+    </div>
+  </div>
+  <!-- user Details/////////
+    
+  //////// -->
+  <div class="user-relation-continer" *ngIf="openUserData">
+    <!-- user Detaisl -->
+    <div class="single-relation user-persoanl-data" *ngIf="relations">
+      <div class="user-data-col">
+        <label for="firstName" class="form-sub-heading">Full Name</label>
+        <label for="firstName" class="user-values">{{
+          relations.firstName + " " + relations.lastName | titlecase
+        }}</label>
+      </div>
+      <div class="user-data-col">
+        <label for="firstName" class="form-sub-heading">Gender</label>
+        <label for="firstName" class="user-values">{{
+          relations.gender | titlecase
+        }}</label>
+      </div>
+      <div class="user-data-col">
+        <label for="firstName" class="form-sub-heading">Birth Date</label>
+        <label for="firstName" class="user-values">{{
+          relations.dateOfBirth.toDate().toDateString()
+        }}</label>
+      </div>
+      <div class="user-data-col">
+        <label for="firstName" class="form-sub-heading">Birth Time</label>
+        <label for="firstName" class="user-values">{{
+          relations.birthTime
+        }}</label>
+      </div>
+      <div class="user-data-col">
+        <label for="firstName" class="form-sub-heading">Birth Place</label>
+        <label for="firstName" class="user-values">{{
+          relations.birthPlace | titlecase
+        }}</label>
+      </div>
+      <div class="user-data-col">
+        <label for="firstName" class="form-sub-heading">Maritial Status</label>
+        <label for="firstName" class="user-values">{{
+          relations.maritialStatus | titlecase
+        }}</label>
+      </div>
+    </div>
+    <!-- <div></div> -->
+    <!-- Relation details -->
+    <div class="user-relation-data">
+      <h3>Relation Data</h3>
+      <div *ngIf="relations?.relatives?.length && openUserData">
+        <div
+          *ngFor="let item of relations?.relatives; let index = index"
+          class="single-relation"
+        >
+          <div class="user-data-col">
+            <label for="firstName" class="form-sub-heading">Relation</label>
+            <label for="firstName" class="user-values">{{
+              item.relation | titlecase
+            }}</label>
+          </div>
+          <div class="user-data-col">
+            <label for="firstName" class="form-sub-heading">Full Name</label>
+            <label for="firstName" class="user-values">{{
+              item.firstName + " " + item.lastName | titlecase
+            }}</label>
+          </div>
+          <div class="user-data-col">
+            <label for="firstName" class="form-sub-heading">Gender</label>
+            <label for="firstName" class="user-values">{{
+              item.gender | titlecase
+            }}</label>
+          </div>
+          <div class="user-data-col">
+            <label for="firstName" class="form-sub-heading">Birth Date</label>
+            <label for="firstName" class="user-values">{{
+              item.dateOfBirth
+            }}</label>
+          </div>
+          <div class="user-data-col">
+            <label for="firstName" class="form-sub-heading">Birth Time</label>
+            <label for="firstName" class="user-values">{{
+              item.birthTime
+            }}</label>
+          </div>
+          <div class="user-data-col">
+            <label for="firstName" class="form-sub-heading">Birth Place</label>
+            <label for="firstName" class="user-values">{{
+              item.birthPlace | titlecase
+            }}</label>
+          </div>
+          <div class="user-data-col">
+            <label for="firstName" class="form-sub-heading"
+              >Maritial Status</label
+            >
+            <label for="firstName" class="user-values">{{
+              item.maritialStatus | titlecase
+            }}</label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

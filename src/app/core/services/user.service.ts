@@ -1,12 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { Observable, from } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 import {
   Firestore,
   doc,
   getDoc,
+  getDocs,
   setDoc,
   addDoc,
   updateDoc,
@@ -21,9 +20,9 @@ import {
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private http: HttpClient) {}
 
-  private userData;
+  public userData;
 
   get getUserData() {
     return this.userData;
@@ -40,14 +39,27 @@ export class UserService {
     return allData;
   }
 
+  async getUserDataInfo(userId) {
+    let userData = {};
+    const userRef = doc(this.firestore, 'users', userId);
+    let data = (await getDoc(userRef)).data();
+    userData = { ...data };
+    if (data && data['isAstrologer']) {
+      const astoRef = doc(this.firestore, 'astrologers', userId);
+      const astrodata = (await getDoc(astoRef)).data();
+      return astrodata;
+    }
+    return userData;
+  }
+
   async fetchUserData(userId, authData?) {
     const userRef = doc(this.firestore, 'users', userId);
     const data = (await getDoc(userRef)).data();
-    if (data['isAstrologer']) {
+    if (data && data['isAstrologer']) {
       // get astolrget data
       const astroRef = doc(this.firestore, 'astrologers', userId);
       const astrodata = (await getDoc(astroRef)).data();
-      this.userData = { ...data, astrodata, phoneNumber: authData };
+      this.userData = { ...data, ...astrodata, phoneNumber: authData };
     } else {
       this.userData = { ...data, phoneNumber: authData };
     }
@@ -56,9 +68,12 @@ export class UserService {
     const userRef = doc(this.firestore, 'users', userData.uid);
     return setDoc(userRef, userData);
   }
-
   async UpdateUser(id: string, userData: any): Promise<any> {
     const userRef = doc(this.firestore, 'users', id);
+    return updateDoc(userRef, userData);
+  }
+  async UpdateAstroUser(id: string, userData: any): Promise<any> {
+    const userRef = doc(this.firestore, 'astrologers', id);
     return updateDoc(userRef, userData);
   }
   async AddRelatives(id: string, userData: any): Promise<any> {
@@ -72,11 +87,18 @@ export class UserService {
     );
   }
   async AdminLinkCreation(code: string): Promise<any> {
-    const userRef = collection(this.firestore, 'create_astrologers_form_links');
-    const saveData = await addDoc(userRef, {
-      code,
-      submitted: false,
-    });
+    const userRef = doc(this.firestore, 'create_astrologers_form_links', code);
+
+    const saveData = await setDoc(
+      userRef,
+      {
+        code,
+        submitted: false,
+      },
+      {
+        merge: true,
+      }
+    );
     return saveData;
   }
   async CreateAstrologer(userid, data, code): Promise<any> {
@@ -87,8 +109,115 @@ export class UserService {
       'create_astrologers_form_links',
       code
     );
-    setDoc(astroUserRef, { isAstrologer: true });
+    setDoc(astroUserRef, {
+      isAstrologer: true,
+      dateOfBirth: '',
+      firstName: '',
+      lastName: '',
+      birthPlace: '',
+      gender: '',
+      profilePicUrl: '',
+      maritialStatus: '',
+    });
     setDoc(astroRef, data);
     return updateDoc(astroLinkRef, { submitted: true });
+  }
+  async checkNotificationIsThere(userId, senderId, type) {
+    const notificationsRef = collection(
+      this.firestore,
+      'notifications',
+      userId,
+      'notifications'
+    );
+    const q = query(
+      notificationsRef,
+      where('senderId', '==', senderId),
+      where('isRead', '==', false),
+      where('type', '==', type)
+    );
+    const data = await getDocs(q);
+    return data;
+  }
+  async NotifyAstrologerForChat(astrologerData, userData) {
+    const alreadyNotificationPresent = await this.checkNotificationIsThere(
+      astrologerData['uid'],
+      userData['uid'],
+      'chat'
+    );
+    if (alreadyNotificationPresent?.size) {
+      // notification present
+      return true;
+    } else {
+      const notificationsRef = collection(
+        this.firestore,
+        'notifications',
+        astrologerData['uid'],
+        'notifications'
+      );
+      addDoc(notificationsRef, {
+        type: 'chat',
+        isRead: false,
+        body: 'Want to Chat',
+        date: new Date(),
+        title: `hey ${
+          userData['firstName'] + ' ' + userData['lastName']
+        } wants to chat with you`,
+        senderId: userData['uid'],
+        senderName: userData['firstName'],
+        profilePicUrl: userData['profilePicUrl']
+          ? userData['profilePicUrl']
+          : '',
+      });
+      return true;
+    }
+  }
+  async NotifyUserForChat(userData, notificaitionData) {
+    const alreadyNotificationPresent = await this.checkNotificationIsThere(
+      notificaitionData['senderId'],
+      userData['uid'],
+      'chat'
+    );
+
+    if (alreadyNotificationPresent?.size) {
+      return true;
+    } else {
+      const notificationsRef = collection(
+        this.firestore,
+        'notifications',
+        notificaitionData['senderId'],
+        'notifications'
+      );
+      addDoc(notificationsRef, {
+        type: 'chat',
+        isRead: false,
+        body: 'Want to Chat',
+        date: new Date(),
+        title: `hey ${
+          userData['firstName'] + ' ' + userData['lastName']
+        } wants to chat with you`,
+        senderId: userData['uid'],
+        senderName: userData['firstName'],
+        profilePicUrl: userData['profilePicUrl'],
+      });
+      return false;
+    }
+  }
+  async MarkNotificationForChatAsRead(userId, NotificationId) {
+    const notificationsRef = doc(
+      this.firestore,
+      'notifications',
+      userId,
+      'notifications',
+      NotificationId
+    );
+    const update = await updateDoc(notificationsRef, {
+      isRead: true,
+    });
+    return update;
+  }
+  async GetCcavenuePaymentForm() {
+    return this.http.get('https://raksa.tech/api/request', {
+      responseType: 'text',
+    });
   }
 }

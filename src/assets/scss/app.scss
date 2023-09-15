@@ -127,6 +127,7 @@ small {
   -moz-transition: all ease-out 0.5s;
   -o-transition: all ease-out 0.5s;
   transition: all ease-out 0.5s;
+  z-index: 100;
 
   .navbar {
     padding: 0px !important;

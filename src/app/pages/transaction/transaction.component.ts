@@ -12,7 +12,6 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit() {
     this.activateRoute.queryParams.subscribe((params) => {
-      console.log(params);
       if (params['type'] == 'success') {
         this.trasactionStatus = true;
       } else {

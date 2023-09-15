@@ -1,0 +1,49 @@
+.astro-menu {
+  //   background-color: aqua;
+  margin-left: 1rem;
+  //   padding: 1rem;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  padding: 0px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 64px;
+  color: rgb(89, 87, 87);
+  flex-direction: row;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+}
+.notificaations {
+  background-color: rgb(238, 98, 16);
+  width: 1.5rem;
+  border-radius: 50%;
+  height: 1.5rem;
+  font-size: 1rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  // display: block;
+}
+.with-count {
+  display: flex;
+  gap: 5px;
+}
+.notificaations-in-menu {
+  background-color: rgb(238, 98, 16);
+  width: 1.5rem;
+  border-radius: 50%;
+  height: 1.5rem;
+  font-size: 1rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  // display: block;
+}
+.notification-option {
+  display: flex;
+  text-wrap: nowrap;
+}

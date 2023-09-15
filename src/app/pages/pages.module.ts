@@ -14,10 +14,11 @@ import { ContactousComponent } from './contactous/contactous.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { TermsandconditionsComponent } from './termsandconditions/termsandconditions.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { AstrologerComponent } from './astrologer/astrologer.component';
 
 
 @NgModule({
-    declarations: [RoutingComponents, AdminComponent, LinkcreationComponent, AboutousComponent, ContactousComponent, PrivacypolicyComponent, TermsandconditionsComponent, TransactionComponent],
+    declarations: [RoutingComponents, AdminComponent, LinkcreationComponent, AboutousComponent, ContactousComponent, PrivacypolicyComponent, TermsandconditionsComponent, TransactionComponent, AstrologerComponent],
     imports: [
         CommonModule,
         FormsModule, ReactiveFormsModule,

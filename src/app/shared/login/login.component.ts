@@ -41,7 +41,7 @@ import {
   getAdditionalUserInfo,
 } from '@angular/fire/auth';
 import { Observable, Subject, concat, of, throwError } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Storage,
   ref,
@@ -182,6 +182,7 @@ export class LoginComponent implements OnInit {
     public windowRefService: WindowRefService,
     public activeModal: NgbActiveModal,
     public formBuilder: FormBuilder,
+    public router: Router,
     private http: HttpClient,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -199,6 +200,9 @@ export class LoginComponent implements OnInit {
       } else {
         // this is for user
         this.formStep = 1;
+        this.linkCode = params && params['code'];
+
+        // this.linkCode = params['code'];
       }
     });
     this.loadMovies();
@@ -288,7 +292,6 @@ export class LoginComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((searchText) => {
-        console.log('this is serach text', searchText);
         const httpOptions = {
           headers: {
             'X-RapidAPI-Key':
@@ -303,7 +306,6 @@ export class LoginComponent implements OnInit {
         );
       }),
       tap((data) => {
-        console.log('this is data in tap :', data);
         this.options = [data]; // Update options array with data from API response
       })
     );
@@ -337,8 +339,8 @@ export class LoginComponent implements OnInit {
     )
       .then((result: any) => {
         this.windowRef.confirmationResult = result;
-
-        this.phoneNumber = '094045 40805'
+        // 094045 40805
+        this.phoneNumber = formValues['phoneNumber'].number
           .replace(/\s/g, '')
           .substring(1)
           .replace(
@@ -392,6 +394,7 @@ export class LoginComponent implements OnInit {
             .getDataFromUserCollection(user?.user?.uid)
             .then((data) => {
               if (Object.keys(data).length <= 1 || !data) {
+                // if by mistake they closed or they refreshed the page
                 this.activatedRoute.queryParams.subscribe((params) => {
                   if (params['code'] && params['code'].length == 6) {
                     // this is astrologer
@@ -402,6 +405,13 @@ export class LoginComponent implements OnInit {
                   }
                 });
               } else {
+                // real login happens here
+                if (data['isAstrologer']) {
+                  localStorage.setItem('astrologerScreen', 'true');
+                  this.router.navigateByUrl('/astrologer');
+                  // if astrologer vavigate astrologer screen
+                }
+                window.location.reload();
                 this.activeModal.close({ response: true });
               }
             });
@@ -572,6 +582,7 @@ export class LoginComponent implements OnInit {
       ...astrologer_personal_form,
       ...astrologer_professioal_form,
       ...formBankValues,
+      uid: this.authService.activeUserValue['uid'],
     };
     this.userService
       .CreateAstrologer(
@@ -580,7 +591,14 @@ export class LoginComponent implements OnInit {
         this.linkCode
       )
       .then((data) => {
-        console.log('thiis is saved data :', data);
+        localStorage.removeItem('astrologer-personal-form');
+        localStorage.removeItem('astrologer-professioal-form');
+
+        this.userService.fetchUserData(this.authService.activeUserValue['uid']);
+        localStorage.setItem('astrologerScreen', 'true');
+        this.router.navigateByUrl('/astrologer');
+
+        this.activeModal.close({ response: true });
       });
     alert('Thanks Yet work On this');
   }
@@ -617,7 +635,9 @@ export class LoginComponent implements OnInit {
     if (selectedFile) {
       const storageRef = ref(
         this.storage,
-        '/astrolger/data/webapp/user/' + `qazzxcdaq/` + selectedFile.name
+        '/astrolger/data/webapp/user/' +
+          `${this.authService.activeUserValue['uid']}/` +
+          selectedFile.name
       );
       const task = uploadBytesResumable(storageRef, selectedFile);
 
@@ -645,20 +665,7 @@ export class LoginComponent implements OnInit {
             this.personalForm.patchValue({
               uploadedImage: data,
             });
-            // this.userService
-            //   .UpdateUser(this.authService.activeUserValue['uid'], {
-            //     profilePicUrl: data,
-            //   })
-            //   .then((data) => {
-            //     this.userService.fetchUserData(
-            //       this.userService.getUserData.uid
-            //     );
-            //     // this.uploadProgress = 0;
-            //     this.activeModal.close({ response: true });
-            //   })
-            //   .catch((error: any) => {
-            //     console.log(error);
-            //   });
+            this.uploadProgress = 0;
           });
         }
       );

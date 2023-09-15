@@ -22,13 +22,13 @@
           >
             <div class="profile-pic">
               <img
-                [src]="currentUser.profilePicUrl"
+                [src]="currentUser?.profilePicUrl"
                 class="pro-pic"
                 alt=""
-                *ngIf="currentUser.profilePicUrl"
+                *ngIf="currentUser?.profilePicUrl"
               />
-              <div class="your-letter" *ngIf="!currentUser.profilePicUrl">
-                <p>{{ currentUser.firstName[0] }}</p>
+              <div class="your-letter" *ngIf="!currentUser?.profilePicUrl">
+                <p>{{ currentUser?.firstName[0] }}</p>
               </div>
             </div>
             <input
@@ -47,7 +47,7 @@
 
           <div class="name-phone">
             <label for="userName" class="form-fields-label user-name">{{
-              currentUser.firstName + " " + currentUser.lastName
+              currentUser?.firstName + " " + currentUser?.lastName
             }}</label>
             <label for="userNumber" class="form-fields-label user-number">{{
               phoneNumber
@@ -399,7 +399,7 @@
               </div>
             </div>
             <!-- family details -->
-            <div *ngIf="!currentUser.isAstrologer" ngbAccordionItem>
+            <div *ngIf="!currentUser?.isAstrologer" ngbAccordionItem>
               <h6 ngbAccordionHeader>
                 <button ngbAccordionButton (click)="onPanelClick(1)">
                   <i class="bx bx-sm bx-group"></i>Family Details

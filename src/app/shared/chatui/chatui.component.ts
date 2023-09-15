@@ -7,6 +7,7 @@ import {
   ElementRef,
   ViewChild,
   inject,
+  Input,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -42,6 +43,8 @@ import {
   styleUrls: ['./chatui.component.scss'],
 })
 export class ChatuiComponent implements OnInit, OnDestroy {
+  @Input() parentData;
+
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -52,7 +55,6 @@ export class ChatuiComponent implements OnInit, OnDestroy {
     public windowRefService: WindowRefService,
     public activeModal: NgbActiveModal,
     public formBuilder: FormBuilder,
-    private http: HttpClient,
     private ngZone: NgZone,
     public firestore: Firestore
   ) {}
@@ -66,6 +68,8 @@ export class ChatuiComponent implements OnInit, OnDestroy {
   imagePreview: string | null = null;
   sendImageInMessage = false;
   downloadFile = false;
+  relations;
+  openUserData = false;
 
   messages;
 
@@ -84,7 +88,8 @@ export class ChatuiComponent implements OnInit, OnDestroy {
   async fetchData() {
     const chatRoomCollection = collection(
       this.firestore,
-      'chatRooms/hello',
+      `chatRooms`,
+      this.parentData.roomCode,
       'messages'
     );
 
@@ -105,13 +110,43 @@ export class ChatuiComponent implements OnInit, OnDestroy {
   continue(): void {
     this.confirmationOverlay = false;
   }
-  endChat(): void {
+  async endChat() {
+    // mark notification data as read
+
+    const chatRoomCollection = collection(
+      this.firestore,
+      `chatRooms`,
+      this.parentData.roomCode,
+      'messages'
+    );
+    const docRef = await addDoc(chatRoomCollection, {
+      text: 'User Has End The Chat',
+      file_url: '',
+      isRead: false,
+      mediaUrl: '',
+      message: 'User Has End The Chat',
+      receiverId: '',
+      receiverName: 'some name',
+      receiverPhotoUrl: '',
+      senderId: this.currentUser.uid,
+      senderIsAstrologer: false,
+      senderName: this.currentUser.firstName,
+      senderPhotoUrl: this.currentUser?.profilePicUrl,
+      time: new Date(),
+      type: 'text',
+    });
+    this.messageText = '';
+
+    this.userService.MarkNotificationForChatAsRead(
+      this.authService.activeUserValue['uid'],
+      this.parentData?.notificationData['id']
+    );
+
     this.confirmationOverlay = false;
     let timeChateed = this.formatTime(this.timer);
     const storedTimer = localStorage.removeItem('chatTimer');
+    this.openUserData = false;
     this.activeModal.close({ response: false });
-
-    // end chat logic in this function
   }
 
   scrollToBottom(): void {
@@ -144,15 +179,15 @@ export class ChatuiComponent implements OnInit, OnDestroy {
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   }
 
-  async sendMessage(type: string = 'text', file_url?: string) {
+  async sendMessage(type: string = 'text', file_url: string = '') {
     try {
       if (this.messageText.trim() !== '') {
         const chatRoomCollection = collection(
           this.firestore,
-          'chatRooms/hello',
+          `chatRooms`,
+          this.parentData.roomCode,
           'messages'
         );
-
         const docRef = await addDoc(chatRoomCollection, {
           text: this.messageText,
           file_url: file_url,
@@ -161,19 +196,19 @@ export class ChatuiComponent implements OnInit, OnDestroy {
           message: 'hi',
           receiverId: '',
           receiverName: 'some name',
-          receiverPhotoUrl:
-            'https://firebasestorage.googleapis.com/v0/b/raksa-1e906.appspot.com/o/profilepics%2Fdata%2Fuser%2F0%2Fcom.example.raksa%2Fcache%2F14e38a7a-0b58-479e-8efe-b6d197f9e85a%2F1000021856.jpg2023-07-29%2012%3A16%3A56.346867%7D?alt=media&token=81f6e22c-876e-4e9b-ba1c-65dd25409791',
+          receiverPhotoUrl: '',
           senderId: this.currentUser.uid,
           senderIsAstrologer: false,
           senderName: 'name',
-          senderPhotoUrl:
-            'https://firebasestorage.googleapis.com/v0/b/raksa-1e906.appspot.com/o/profilepics%2Fdata%2Fuser%2F0%2Fcom.example.raksa%2Fcache%2F14e38a7a-0b58-479e-8efe-b6d197f9e85a%2F1000021856.jpg2023-07-29%2012%3A16%3A56.346867%7D?alt=media&token=81f6e22c-876e-4e9b-ba1c-65dd25409791',
+          senderPhotoUrl: this.currentUser?.profilePicUrl,
           time: new Date(),
           type: type,
         });
-        this.messageText = ''; // Clear the input field
+        this.messageText = '';
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log('this is error :', error);
+    }
   }
 
   async sendImageMessage() {
@@ -260,5 +295,19 @@ export class ChatuiComponent implements OnInit, OnDestroy {
     this.sendImageInMessage = false;
     this.downloadFile = false;
     this.messageText = '';
+    this.openUserData = false;
+  }
+  async seeUserDetails() {
+    console.log(this.parentData);
+    const Data = await this.userService.getDataFromUserCollection(
+      this.parentData.notificationData?.senderId
+    );
+
+    console.log('the DATA', Data);
+    if (Data) {
+      this.confirmationOverlay = true;
+      this.relations = Data;
+      this.openUserData = true;
+    }
   }
 }

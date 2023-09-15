@@ -113,6 +113,11 @@ textarea {
   display: grid;
   gap: 10px;
 }
+.userDetails {
+  background: linear-gradient(150.77deg, #d700ff 0%, #7000ff 98.92%);
+  padding: 5px;
+  border-radius: 5px;
+}
 .confirmation-text {
   font-weight: 600;
 }
@@ -127,4 +132,32 @@ textarea {
   flex-direction: column;
   gap: 0.5rem;
   word-wrap: break-word;
+}
+.single-relation {
+  margin: 0 0 1rem 0;
+  padding: 0.5rem 0 0 1rem;
+  border: 1px solid white;
+  border-radius: 1rem;
+}
+.user-values {
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+.user-relation-continer {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  grid-template-columns: 1fr 2fr;
+  width: 100%;
+  gap: 10px;
+  padding: 0 1rem 0 1rem;
+}
+.user-persoanl-data {
+  // background-color: #7000ff;
+}
+.user-relation-data {
+  // background-color: #ab55c8;
+  height: 50%;
+  overflow-y: scroll;
 }

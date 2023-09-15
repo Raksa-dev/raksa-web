@@ -37,7 +37,6 @@ export class LinkcreationComponent {
   async copyLink() {
     navigator.clipboard.writeText(this.link);
     await this.userServices.AdminLinkCreation(this.code).then((data) => {
-      console.log('thisis added :', data);
     });
     // Alert the copied text
     alert('Copied the text: ' + this.link);

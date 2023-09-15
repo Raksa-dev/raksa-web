@@ -1,0 +1,63 @@
+<div class="modal-header mb-5">
+  <h4 class="modal-title" id="modal-basic-title">User Wallet</h4>
+  <button
+    type="button"
+    class="btn-close bg-white"
+    aria-label="Close"
+    (click)="onCancel()"
+  ></button>
+</div>
+<div class="modal-body mb-5">
+  <div class="container-fluid">
+    <div class="row d-flex align-content-center justify-content-center">
+      <div class="col-md-7 login-form">
+        <div class="d-flex login-signup"></div>
+        <div class="position-relative">
+          <div
+            class="d-flex justify-content-center align-content-lg-center position-relative"
+          >
+            <div class="profile-pic">
+              <img class="pro-pic" alt="" />
+              <div class="your-letter" *ngIf="!currentUser?.profilePicUrl">
+                <p>{{ 1000000 }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div ngbAccordion [closeOthers]="true">
+            <!-- my details -->
+            <div ngbAccordionItem>
+              <h6 ngbAccordionHeader>
+                <button ngbAccordionButton>
+                  <i class="bx bx-sm bx-user"></i> My Details
+                </button>
+              </h6>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <!-- signup form -->
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <!-- family details -->
+            <div *ngIf="!currentUser?.isAstrologer" ngbAccordionItem>
+              <h6 ngbAccordionHeader>
+                <button ngbAccordionButton>
+                  <i class="bx bx-sm bx-group"></i>Family Details
+                </button>
+              </h6>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div>NO DATA</div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

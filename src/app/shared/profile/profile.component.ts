@@ -97,7 +97,7 @@ export class ProfileComponent {
 
   ngOnInit(): void {
     this.loadMovies();
-    this.userService.fetchUserData(this.userService.getUserData.uid);
+    // this.userService.fetchUserData(this.userService?.getUserData?.uid);
   }
 
   trackByFn(item: any) {
@@ -338,6 +338,15 @@ export class ProfileComponent {
         },
         () => {
           getDownloadURL(storageRef).then((data) => {
+            if (this.currentUser['isAstrologer']) {
+              this.userService
+                .UpdateAstroUser(this.authService.activeUserValue['uid'], {
+                  profilePicUrl: data,
+                })
+                .then((data) => {
+                  console.log('Astro user updated as well');
+                });
+            }
             this.userService
               .UpdateUser(this.authService.activeUserValue['uid'], {
                 profilePicUrl: data,
@@ -347,6 +356,9 @@ export class ProfileComponent {
                   this.userService.getUserData.uid
                 );
                 this.uploadProgress = 0;
+                this.userService.fetchUserData(
+                  this.authService.activeUserValue['uid']
+                );
                 this.activeModal.close({ response: true });
               })
               .catch((error: any) => {

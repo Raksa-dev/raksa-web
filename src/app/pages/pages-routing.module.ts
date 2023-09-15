@@ -12,6 +12,7 @@ import { ContactousComponent } from './contactous/contactous.component';
 import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component';
 import { TermsandconditionsComponent } from './termsandconditions/termsandconditions.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { AstrologerComponent } from './astrologer/astrologer.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'transaction',
     component: TransactionComponent,
+  },
+  {
+    path: 'astrologer',
+    component: AstrologerComponent,
   },
   {
     path: 'live',
