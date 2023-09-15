@@ -221,9 +221,8 @@ export class UserService {
       'https://raksa.tech/api/request',
       {
         orderParams: {
-          order_id: 'DASKJDNQWJND_userId',
-          amount: 1000,
-          currency: 'INR',
+          order_id: 'ASTRO_1694784153561_databaseUserTableID',
+          amount: 100,
           language: 'en',
         },
         keys: {
