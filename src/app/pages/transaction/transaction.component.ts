@@ -43,6 +43,7 @@ export class TransactionComponent implements OnInit {
           .updateUserWalletAmount(Number(decryptedData.amount), getUserId[2])
           .then((data) => {
             console.log('this is data:', data);
+            this.userService.fetchUserData(getUserId[2]);
           });
       }
     });
