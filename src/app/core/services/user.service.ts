@@ -217,7 +217,8 @@ export class UserService {
     return update;
   }
   async GetCcavenuePaymentForm(amount, userId) {
-    const order_ID = `Ast_160923_${userId}`;
+    var randomNumber = Math.floor(Math.random() * 900) + 100;
+    const order_ID = `Astro_${randomNumber}_${userId}`;
     return this.http.post(
       'https://raksa.tech/api/request',
       {
