@@ -217,7 +217,7 @@ export class UserService {
     return update;
   }
   async GetCcavenuePaymentForm(amount, userId) {
-    const order_ID = `ASTRO_${Date.now()}_${userId}`;
+    const order_ID = `A_$${userId}`;
     return this.http.post(
       'https://raksa.tech/api/request',
       {
