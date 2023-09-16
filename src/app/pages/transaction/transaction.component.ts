@@ -17,21 +17,35 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit() {
     this.activateRoute.queryParams.subscribe((params) => {
+      var bytes = crypto.AES.decrypt(params['val'].replace(/ /g, '+'), 'Astro');
+      var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+      const getUserId = decryptedData.order_id.split('_');
       if (params['type'] == 'success') {
         this.trasactionStatus = true;
-        var bytes = crypto.AES.decrypt(
-          params['val'].replace(/ /g, '+'),
-          'Astro'
-        );
-        var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
-        const getUserId = decryptedData.order_id.split('_');
         this.userService
-          .updateUserWalletAmount(Number(decryptedData.amount), getUserId[2])
+          .updateUserWalletAmount(
+            Number(decryptedData.amount),
+            getUserId[2],
+            decryptedData['order_id'],
+            decryptedData['tracking_id'],
+            decryptedData['failure_message'],
+            decryptedData['order_status'],
+            decryptedData['status_message']
+          )
           .then((data) => {
             console.log('this is data:', data);
           });
       } else {
         this.trasactionStatus = false;
+        this.userService.updateUserWalletAmountForElse(
+          Number(decryptedData.amount),
+          getUserId[2],
+          decryptedData['order_id'],
+          decryptedData['tracking_id'],
+          decryptedData['failure_message'],
+          decryptedData['order_status'],
+          decryptedData['status_message']
+        );
       }
     });
   }

@@ -237,10 +237,69 @@ export class UserService {
       }
     );
   }
-  async updateUserWalletAmount(amount, userId) {
+  async updateUserWalletAmount(
+    amount,
+    userId,
+    order_id,
+    tracking_id = '',
+    failure_message = '',
+    status = '',
+    status_message = ''
+  ) {
     const userRef = doc(this.firestore, 'users', userId);
-    const updatedData = await updateDoc(userRef, {
-      walletBalance: increment(amount),
+    const updatedData = await setDoc(
+      userRef,
+      {
+        walletBalance: increment(amount),
+        transactions: arrayUnion(order_id),
+      },
+      {
+        merge: true,
+      }
+    );
+    const transRef = doc(this.firestore, 'transactions', order_id);
+    const createTransaction = await setDoc(transRef, {
+      id: order_id,
+      date: new Date(),
+      receiptId: tracking_id,
+      rechargeAmount: amount,
+      userId: userId,
+      status,
+      failure_message,
+      status_message,
+    });
+
+    return updatedData;
+  }
+  async updateUserWalletAmountForElse(
+    amount,
+    userId,
+    order_id,
+    tracking_id = '',
+    failure_message = '',
+    status = '',
+    status_message = ''
+  ) {
+    const userRef = doc(this.firestore, 'users', userId);
+    const updatedData = await setDoc(
+      userRef,
+      {
+        transactions: arrayUnion(order_id),
+      },
+      {
+        merge: true,
+      }
+    );
+    const transRef = doc(this.firestore, 'transactions', order_id);
+    const createTransaction = await setDoc(transRef, {
+      id: order_id,
+      date: new Date(),
+      receiptId: tracking_id,
+      rechargeAmount: amount,
+      userId: userId,
+      status,
+      failure_message,
+      status_message,
     });
 
     return updatedData;
