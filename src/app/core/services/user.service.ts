@@ -14,6 +14,7 @@ import {
   collection,
   where,
   query,
+  increment,
 } from '@angular/fire/firestore';
 
 @Injectable({
@@ -215,14 +216,14 @@ export class UserService {
     });
     return update;
   }
-  async GetCcavenuePaymentForm() {
-    const oder_ID = 'ASTRO_1694784153561_databaseID';
+  async GetCcavenuePaymentForm(amount, userId) {
+    const order_ID = `ASTRO_${Date.now()}_${userId}`;
     return this.http.post(
       'https://raksa.tech/api/request',
       {
         orderParams: {
-          order_id: 'ASTRO_1694784153561_databaseUserTableID',
-          amount: 100,
+          order_id: order_ID,
+          amount: amount,
           language: 'en',
         },
         keys: {
@@ -234,5 +235,13 @@ export class UserService {
         responseType: 'text',
       }
     );
+  }
+  async updateUserWalletAmount(amount, userId) {
+    const userRef = doc(this.firestore, 'users', userId);
+    const updatedData = await updateDoc(userRef, {
+      walletBalance: increment(amount),
+    });
+
+    return updatedData;
   }
 }

@@ -17,9 +17,13 @@
             class="d-flex justify-content-center align-content-lg-center position-relative"
           >
             <div class="profile-pic">
-              <img class="pro-pic" alt="" />
-              <div class="your-letter" *ngIf="!currentUser?.profilePicUrl">
-                <p>{{ 1000000 }}</p>
+              Current Balance
+              <div class="your-letter">
+                <p>
+                  {{
+                    currentUser?.walletBalance ? currentUser?.walletBalance : 0
+                  }}
+                </p>
               </div>
             </div>
           </div>
@@ -29,19 +33,50 @@
             <div ngbAccordionItem>
               <h6 ngbAccordionHeader>
                 <button ngbAccordionButton>
-                  <i class="bx bx-sm bx-user"></i> My Details
+                  <i class="bx bx-sm bx-wallet-alt"></i>
+                  <span class="m-1">Add Money</span>
                 </button>
               </h6>
               <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
                   <ng-template>
                     <!-- signup form -->
+                    <form
+                      class="needs-validation"
+                      (ngSubmit)="submitAmountDetailsForm()"
+                      [formGroup]="addMoneyForm"
+                      autocomplete="off"
+                    >
+                      <div class="mb-2">
+                        <label for="amount" class="form-fields-label"
+                          >Amount</label
+                        >
+                        <input
+                          type="number"
+                          id="amount"
+                          formControlName="amount"
+                          class="form-control"
+                          placeholder="Enter Amount"
+                        />
+                      </div>
+
+                      <div class="d-flex justify-content-center">
+                        <button
+                          type="submit"
+                          id="sign-in-button"
+                          class="btn gradient-button"
+                          [disabled]="addMoneyForm.invalid"
+                        >
+                          <span>Proceed</span>
+                        </button>
+                      </div>
+                    </form>
                   </ng-template>
                 </div>
               </div>
             </div>
             <!-- family details -->
-            <div *ngIf="!currentUser?.isAstrologer" ngbAccordionItem>
+            <!-- <div *ngIf="!currentUser?.isAstrologer" ngbAccordionItem>
               <h6 ngbAccordionHeader>
                 <button ngbAccordionButton>
                   <i class="bx bx-sm bx-group"></i>Family Details
@@ -54,7 +89,7 @@
                   </ng-template>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

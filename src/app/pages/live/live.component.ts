@@ -112,12 +112,12 @@ export class LiveComponent {
       );
   }
   async openPaymentForm() {
-    (await this.userService.GetCcavenuePaymentForm()).subscribe(
-      (data: string) => {
-        let child = window.open('about:blank', 'myChild');
-        child.document.write(data);
-        child.document.close();
-      }
-    );
+    // (await this.userService.GetCcavenuePaymentForm()).subscribe(
+    //   (data: string) => {
+    //     let child = window.open('about:blank', 'myChild');
+    //     child.document.write(data);
+    //     child.document.close();
+    //   }
+    // );
   }
 }
