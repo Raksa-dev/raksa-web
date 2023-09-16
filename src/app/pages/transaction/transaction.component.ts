@@ -32,6 +32,12 @@ export class TransactionComponent implements OnInit {
           });
       } else {
         this.trasactionStatus = false;
+        var bytes = crypto.AES.decrypt(
+          params['val'].replace(/ /g, '+'),
+          'Astro'
+        );
+        var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
+        console.log(decryptedData);
       }
     });
   }
