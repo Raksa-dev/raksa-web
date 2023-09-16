@@ -32,19 +32,6 @@ export class TransactionComponent implements OnInit {
           });
       } else {
         this.trasactionStatus = false;
-        var bytes = crypto.AES.decrypt(
-          params['val'].replace(/ /g, '+'),
-          'Astro'
-        );
-        var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
-        console.log(decryptedData);
-        const getUserId = decryptedData.order_id.split('_');
-        this.userService
-          .updateUserWalletAmount(Number(decryptedData.amount), getUserId[2])
-          .then((data) => {
-            console.log('this is data:', data);
-            this.userService.fetchUserData(getUserId[2]);
-          });
       }
     });
   }

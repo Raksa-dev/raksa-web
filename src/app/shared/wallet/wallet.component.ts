@@ -39,10 +39,13 @@ export class WalletComponent implements OnInit {
       let child = window.open('about:blank', 'myChild');
       child.document.write(data);
       child.document.close();
-      this.activeModal.close({ response: false });
     });
   }
 
+  refreshScreen() {
+    this.userService.fetchUserData(this.currentUser['uid']);
+    this.activeModal.close({ response: false });
+  }
   onCancel(): void {
     this.activeModal.close({ response: false });
   }
