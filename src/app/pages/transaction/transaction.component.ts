@@ -38,6 +38,12 @@ export class TransactionComponent implements OnInit {
         );
         var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
         console.log(decryptedData);
+        const getUserId = decryptedData.order_id.split('_');
+        this.userService
+          .updateUserWalletAmount(Number(decryptedData.amount), getUserId[2])
+          .then((data) => {
+            console.log('this is data:', data);
+          });
       }
     });
   }
