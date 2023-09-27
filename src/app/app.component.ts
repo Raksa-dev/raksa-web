@@ -11,19 +11,10 @@ import { CallnotificationsComponent } from './shared/callnotifications/callnotif
 
 import {
   Firestore,
-  doc,
-  getDoc,
-  setDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  arrayUnion,
   collectionData,
   collection,
   where,
   query,
-  getDocs,
-  getCountFromServer,
 } from '@angular/fire/firestore';
 import { WalletComponent } from './shared/wallet/wallet.component';
 

@@ -97,3 +97,24 @@
     </div>
   </div>
 </div>
+<div class="overlay-conformation" *ngIf="showPaymentOverlay">
+  <h3>Choose Your Payment Partner</h3>
+  <div class="payment-buttons">
+    <button
+      type="submit"
+      id="sign-in-button"
+      class="btn gradient-button"
+      (click)="openPayment('phonePay')"
+    >
+      <span>Phone Pe</span>
+    </button>
+    <button
+      id="sign-in-button"
+      class="btn gradient-button"
+      (click)="openPayment('ccAvenue')"
+    >
+      <span><img src="https://www.ccavenue.com/images_mcpg/logo.png" />></span>
+    </button>
+  </div>
+  <h3 (click)="closeOverlay()" class="mt-5">Go Back</h3>
+</div>

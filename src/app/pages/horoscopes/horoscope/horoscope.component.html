@@ -1,0 +1,65 @@
+<div class="zodiac-continer">
+  <div class="zodiac-basic-details">
+    <div class="horoscopecard">
+      <div class="horoscopecard-image">
+        <img [src]="zodiacBasicData.img_src" alt="" />
+      </div>
+      <div class="basic-text">
+        <h6 class="text-center">{{ zodiacBasicData.name }}</h6>
+        <h6 class="date-range">{{ zodiacBasicData.date_range }}</h6>
+        <div class="range-buttons-mobile">
+          <span
+            class="range-button"
+            [class.selected]="selectedTab == 1"
+            (click)="setSelectTab(1)"
+            >Daily</span
+          >
+          <span
+            class="range-button"
+            [class.selected]="selectedTab == 2"
+            (click)="setSelectTab(2)"
+            >Monthly</span
+          >
+          <span
+            class="range-button"
+            [class.selected]="selectedTab == 3"
+            (click)="setSelectTab(3)"
+            >Yearly</span
+          >
+        </div>
+        <span class="dates-mobile">
+          <i class="bx bx-calendar"></i>
+          <span>{{ showdate }}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="range-buttons">
+    <span
+      class="range-button"
+      [class.selected]="selectedTab == 1"
+      (click)="setSelectTab(1)"
+      >Daily</span
+    >
+    <span
+      class="range-button"
+      [class.selected]="selectedTab == 2"
+      (click)="setSelectTab(2)"
+      >Monthly</span
+    >
+    <span
+      class="range-button"
+      [class.selected]="selectedTab == 3"
+      (click)="setSelectTab(3)"
+      >Yearly</span
+    >
+  </div>
+  <span class="dates">
+    <i class="bx bx-calendar"></i>
+    <span>{{ showdate }}</span>
+  </span>
+  <div class="description">
+    {{ description }}
+  </div>
+</div>

@@ -1,0 +1,116 @@
+.zodiac-continer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    height: auto;
+  }
+  //   background-color: #7000ff;
+}
+
+.horoscopecard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1px;
+  margin: 10px;
+  .horoscopecard-image {
+    background-color: #362761;
+    height: 130px;
+    width: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    overflow: hidden;
+    @media only screen and (min-width: 320px) and (max-width: 767px) {
+      height: 130px;
+      width: 130px;
+    }
+  }
+  .date-range {
+    font-size: 0.75rem;
+    color: rgba(245, 245, 245, 0.616);
+    margin: 0;
+  }
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    .basic-text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+  }
+}
+.range-buttons-mobile {
+  display: none;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+}
+.range-buttons {
+  display: flex;
+  gap: 1rem;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    display: none;
+  }
+}
+.range-button {
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    font-size: 0.75rem;
+  }
+}
+.selected {
+  background: linear-gradient(150.77deg, #d700ff 0%, #7000ff 98.92%);
+  padding: 5px;
+  border-radius: 5px;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    padding: 3px;
+    border-radius: 50%;
+  }
+}
+.dates-mobile {
+  display: none;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.75rem;
+    gap: 0.5rem;
+  }
+}
+.dates {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+  gap: 0.5rem;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    display: none;
+  }
+}
+.description {
+  display: flex;
+  width: 80%;
+  height: 250px;
+  font-size: 1rem;
+  padding: 1rem;
+  overflow-y: scroll;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    display: block;
+    overflow: visible;
+    height: auto;
+  }
+}

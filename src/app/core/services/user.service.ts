@@ -102,6 +102,21 @@ export class UserService {
     );
     return saveData;
   }
+  async importDataFromJson() {
+    // const data = await this.http.get('/assets/MonthlyHoroscope.json');
+    // data.subscribe((dataum: []) => {
+    // let yearlycollectinRef = collection(
+    //   this.firestore,
+    //   'horoscopes',
+    //   'monthly',
+    //   'data'
+    // );
+    // dataum.forEach((element) => {
+    //   console.log(element);
+    //   addDoc(yearlycollectinRef, element);
+    // });
+    // });
+  }
   async CreateAstrologer(userid, data, code): Promise<any> {
     const astroUserRef = doc(this.firestore, 'users', userid);
     const astroRef = doc(this.firestore, 'astrologers', userid);
@@ -237,6 +252,22 @@ export class UserService {
       }
     );
   }
+  async GetPhonePayPaymentForm(amount, userId) {
+    var randomNumber = Math.floor(Math.random() * 900) + 100;
+    const order_ID = `pe_${randomNumber}_${userId}`;
+    return this.http.post(
+      'http://localhost:3000/api/phonepe/payu',
+      {
+        merchantTransactionId: order_ID,
+        merchantUserId: userId,
+        amount,
+        mobileNumber: '',
+      },
+      {
+        responseType: 'json',
+      }
+    );
+  }
   async updateUserWalletAmount(
     amount,
     userId,
@@ -303,5 +334,10 @@ export class UserService {
     });
 
     return updatedData;
+  }
+  async checkForTrx(tranxId) {
+    const transRef = doc(this.firestore, 'transactions', tranxId);
+    const data = await getDoc(transRef);
+    return data.data();
   }
 }

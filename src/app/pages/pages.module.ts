@@ -15,10 +15,12 @@ import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component'
 import { TermsandconditionsComponent } from './termsandconditions/termsandconditions.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { AstrologerComponent } from './astrologer/astrologer.component';
+import { HoroscopesComponent } from './horoscopes/horoscopes.component';
+import { HoroscopeComponent } from './horoscopes/horoscope/horoscope.component';
 
 
 @NgModule({
-    declarations: [RoutingComponents, AdminComponent, LinkcreationComponent, AboutousComponent, ContactousComponent, PrivacypolicyComponent, TermsandconditionsComponent, TransactionComponent, AstrologerComponent],
+    declarations: [RoutingComponents, AdminComponent, LinkcreationComponent, AboutousComponent, ContactousComponent, PrivacypolicyComponent, TermsandconditionsComponent, TransactionComponent, AstrologerComponent, HoroscopesComponent, HoroscopeComponent],
     imports: [
         CommonModule,
         FormsModule, ReactiveFormsModule,

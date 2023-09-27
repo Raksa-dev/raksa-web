@@ -13,12 +13,23 @@ import { PrivacypolicyComponent } from './privacypolicy/privacypolicy.component'
 import { TermsandconditionsComponent } from './termsandconditions/termsandconditions.component';
 import { TransactionComponent } from './transaction/transaction.component';
 import { AstrologerComponent } from './astrologer/astrologer.component';
+import { HoroscopesComponent } from './horoscopes/horoscopes.component';
+import { HoroscopeComponent } from './horoscopes/horoscope/horoscope.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
     pathMatch: 'full',
+  },
+
+  {
+    path: 'horoscopes',
+    component: HoroscopesComponent,
+  },
+  {
+    path: 'horoscope/:zodiac',
+    component: HoroscopeComponent,
   },
   {
     path: 'chat',

@@ -15,6 +15,7 @@ import {
   styleUrls: ['./wallet.component.scss'],
 })
 export class WalletComponent implements OnInit {
+  showPaymentOverlay: boolean = false;
   constructor(
     public authService: AuthService,
     public userService: UserService,
@@ -29,17 +30,39 @@ export class WalletComponent implements OnInit {
 
   ngOnInit(): void {}
   async submitAmountDetailsForm() {
+    this.showPaymentOverlay = true;
+  }
+  closeOverlay() {
+    this.showPaymentOverlay = false;
+  }
+  async openPayment(type) {
     const formValues = this.addMoneyForm.value;
-    (
-      await this.userService.GetCcavenuePaymentForm(
-        formValues.amount,
-        this.currentUser['uid']
-      )
-    ).subscribe((data: string) => {
-      let child = window.open('about:blank', 'myChild');
-      child.document.write(data);
-      child.document.close();
-    });
+    if (type == 'phonePay') {
+      (
+        await this.userService.GetPhonePayPaymentForm(
+          formValues.amount,
+          this.currentUser['uid']
+        )
+      ).subscribe((data) => {
+        console.log(
+          'thisj is data phone pay:',
+          data['data'].instrumentResponse.redirectInfo.url
+        );
+        window.open(data['data'].instrumentResponse.redirectInfo.url, '_blank');
+      });
+    }
+    if (type == 'ccAvenue') {
+      (
+        await this.userService.GetCcavenuePaymentForm(
+          formValues.amount,
+          this.currentUser['uid']
+        )
+      ).subscribe((data: string) => {
+        let child = window.open('about:blank', 'myChild');
+        child.document.write(data);
+        child.document.close();
+      });
+    }
   }
 
   refreshScreen() {
