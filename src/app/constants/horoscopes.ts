@@ -6,7 +6,7 @@ export const HOROSCOPESDATA = [
   },
   {
     img_src: '../../../assets/images/horoscopes/Tarus.svg',
-    name: 'Tarus',
+    name: 'Taurus',
     date_range: 'Apr 20 - May 20',
   },
   {
@@ -26,7 +26,7 @@ export const HOROSCOPESDATA = [
   },
   {
     img_src: '../../../assets/images/horoscopes/Vigro.svg',
-    name: 'Vigro',
+    name: 'Virgo',
     date_range: 'Aug 23 - Sep 22',
   },
   {

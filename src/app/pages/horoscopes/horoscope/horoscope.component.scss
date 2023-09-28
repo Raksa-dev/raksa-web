@@ -114,6 +114,68 @@
     height: auto;
   }
 }
+.rest-data {
+  width: 50%;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    width: 100%;
+  }
+}
+.daily-restdata {
+  display: flex;
+  justify-content: space-between;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+.daily-labels {
+  font-weight: bold;
+  font-size: 1rem;
+}
+.daily-val {
+  font-size: 1rem;
+}
 ::-webkit-scrollbar {
   display: none;
+}
+.cosmic-tip {
+  display: flex;
+  background-color: #7000ff;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 3px;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+}
+
+.monthly-restdata {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  border-radius: 5px;
+  text-wrap: nowrap;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    padding: 5px;
+  }
+}
+
+.monthly-data-buttons {
+  display: flex;
+  gap: 1rem;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    // display: none;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+  }
+}
+.monthly-data-button {
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    font-size: 0.75rem;
+  }
 }

@@ -256,7 +256,7 @@ export class UserService {
     var randomNumber = Math.floor(Math.random() * 900) + 100;
     const order_ID = `pe_${randomNumber}_${userId}`;
     return this.http.post(
-      'http://localhost:3000/api/phonepe/payu',
+      'https://raksa.tech/api/phonepe/payu',
       {
         merchantTransactionId: order_ID,
         merchantUserId: userId,

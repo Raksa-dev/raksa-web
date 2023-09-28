@@ -3,6 +3,19 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { HOROSCOPESDATA } from 'src/app/constants/horoscopes';
 import { AuthService } from 'src/app/core/services';
 
+const MONTHLYDATAHEADERS = [
+  'Overview',
+  'Business',
+  'Career',
+  'Finance',
+  'Health',
+  'Love and Reltionships',
+  'Professional',
+  'Student',
+];
+
+const YEARLY = ['Horoscope', 'education', 'money', 'health', 'love', 'career'];
+
 @Component({
   selector: 'app-horoscope',
   templateUrl: './horoscope.component.html',
@@ -11,8 +24,13 @@ import { AuthService } from 'src/app/core/services';
 export class HoroscopeComponent implements OnInit {
   public zodiacBasicData;
   public selectedTab = 1;
+  public monthlyDataSelected: number = 1;
+  public yearlyDataSelected: number = 1;
   public showdate;
   public description = '';
+  public dailyZodiacData: object = {};
+  public monthlyDataCache: object = {};
+  public yearlyDataCache: object = {};
   constructor(
     public activateRoute: ActivatedRoute,
     public authServices: AuthService
@@ -31,6 +49,7 @@ export class HoroscopeComponent implements OnInit {
       await this.authServices.getDailyHoroscope(zodiac, formattedDate)
     ).subscribe((datum) => {
       this.description = datum[0]?.description;
+      this.dailyZodiacData = { ...datum[0] };
     });
   }
   ngOnInit(): void {
@@ -48,6 +67,8 @@ export class HoroscopeComponent implements OnInit {
 
   async setSelectTab(num) {
     this.selectedTab = num;
+    this.monthlyDataSelected = 1;
+    this.yearlyDataSelected = 1;
     if (num == 1) {
       this.showdate = new Date().toDateString();
       this.fetchDailyData(this.zodiacBasicData.name);
@@ -62,6 +83,7 @@ export class HoroscopeComponent implements OnInit {
         )
       ).subscribe((datum) => {
         this.description = datum[0]?.Overview;
+        this.monthlyDataCache = { ...datum[0] };
       });
     }
     if (num == 3) {
@@ -72,7 +94,16 @@ export class HoroscopeComponent implements OnInit {
         )
       ).subscribe((datum) => {
         this.description = datum[0]?.Horoscope;
+        this.yearlyDataCache = { ...datum[0] };
       });
     }
+  }
+  async setMonthlyDataSelected(num) {
+    this.monthlyDataSelected = num;
+    this.description = this.monthlyDataCache[MONTHLYDATAHEADERS[num - 1]];
+  }
+  async setYearlyDataSelected(num) {
+    this.yearlyDataSelected = num;
+    this.description = this.yearlyDataCache[YEARLY[num - 1]];
   }
 }

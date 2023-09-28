@@ -59,6 +59,125 @@
     <i class="bx bx-calendar"></i>
     <span>{{ showdate }}</span>
   </span>
+  <div class="rest-data">
+    <div class="daily-restdata" *ngIf="selectedTab == 1">
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <span class="daily-labels">Colour</span>
+        <span class="daily-val">{{ dailyZodiacData.colour }}</span>
+      </div>
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <span class="daily-labels">Compatibility</span>
+        <span class="daily-val">{{ dailyZodiacData.compatibility }}</span>
+      </div>
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <span class="daily-labels">Lucky number</span>
+        <span class="daily-val">{{ dailyZodiacData.lucky_number }}</span>
+      </div>
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <span class="daily-labels">Lucky time</span>
+        <span class="daily-val">{{ dailyZodiacData.lucky_time }}</span>
+      </div>
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <span class="daily-labels">Mood</span>
+        <span class="daily-val">{{ dailyZodiacData.mood }}</span>
+      </div>
+    </div>
+    <div class="cosmic-tip" *ngIf="selectedTab == 1">
+      <span>cosmic tip: {{ dailyZodiacData.cosmic_tip }}</span>
+    </div>
+    <div class="monthly-restdata" *ngIf="selectedTab == 2">
+      <div class="monthly-data-buttons">
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 1"
+          (click)="setMonthlyDataSelected(1)"
+          >Overview</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 2"
+          (click)="setMonthlyDataSelected(2)"
+          >Business</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 3"
+          (click)="setMonthlyDataSelected(3)"
+          >Career</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 4"
+          (click)="setMonthlyDataSelected(4)"
+          >Finance</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 5"
+          (click)="setMonthlyDataSelected(5)"
+          >Health</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 6"
+          (click)="setMonthlyDataSelected(6)"
+          >Love and Reltionships</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 7"
+          (click)="setMonthlyDataSelected(7)"
+          >Professional</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="monthlyDataSelected == 8"
+          (click)="setMonthlyDataSelected(8)"
+          >Student</span
+        >
+      </div>
+    </div>
+    <div class="monthly-restdata" *ngIf="selectedTab == 3">
+      <div class="monthly-data-buttons">
+        <span
+          class="monthly-data-button"
+          [class.selected]="yearlyDataSelected == 1"
+          (click)="setYearlyDataSelected(1)"
+          >Overview</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="yearlyDataSelected == 2"
+          (click)="setYearlyDataSelected(2)"
+          >Education</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="yearlyDataSelected == 3"
+          (click)="setYearlyDataSelected(3)"
+          >Money</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="yearlyDataSelected == 4"
+          (click)="setYearlyDataSelected(4)"
+          >Health</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="yearlyDataSelected == 5"
+          (click)="setYearlyDataSelected(5)"
+          >Love</span
+        >
+        <span
+          class="monthly-data-button"
+          [class.selected]="yearlyDataSelected == 6"
+          (click)="setYearlyDataSelected(6)"
+          >Career</span
+        >
+      </div>
+    </div>
+  </div>
   <div class="description">
     {{ description }}
   </div>
