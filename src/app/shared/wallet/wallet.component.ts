@@ -44,6 +44,7 @@ export class WalletComponent implements OnInit {
           this.currentUser['uid']
         )
       ).subscribe((data) => {
+        console.log('this is daata: from phoen pe server :', data);
         console.log(
           'thisj is data phone pay:',
           data['data'].instrumentResponse.redirectInfo.url

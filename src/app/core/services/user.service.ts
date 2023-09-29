@@ -16,11 +16,18 @@ import {
   query,
   increment,
 } from '@angular/fire/firestore';
+import { encodeRequest, signRequest } from 'src/app/helpers';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  marchentId = 'RAKSAONLINE';
+  saltIndex = 1;
+  saltKey = 'ba273d65-f2a8-4b07-86e5-5d9f06390ab3';
+  BASE_URL_PROD = 'https://raksa.tech';
+  BASE_URL_LOCAL = 'http://localhost:3000';
+  BASE_URL = this.BASE_URL_PROD;
   constructor(private firestore: Firestore, private http: HttpClient) {}
 
   public userData;
@@ -252,19 +259,34 @@ export class UserService {
       }
     );
   }
-  async GetPhonePayPaymentForm(amount, userId) {
+  async GetPhonePayPaymentForm(amount, userId, mobileNumber?: string) {
     var randomNumber = Math.floor(Math.random() * 900) + 100;
     const order_ID = `pe_${randomNumber}_${userId}`;
-    return this.http.post(
-      'https://raksa.tech/api/phonepe/payu',
-      {
-        merchantTransactionId: order_ID,
-        merchantUserId: userId,
-        amount,
-        mobileNumber: '',
+    const body = {
+      merchantId: this.marchentId,
+      merchantTransactionId: order_ID,
+      merchantUserId: userId,
+      amount: amount * 100, // converted in paise as per the document
+      mobileNumber: mobileNumber ? mobileNumber : '',
+      redirectUrl: `${this.BASE_URL}/api/phonepe/response`,
+      redirectMode: 'POST',
+      callbackUrl: `${this.BASE_URL}/api/phonepe/response`,
+      paymentInstrument: {
+        type: 'PAY_PAGE',
       },
+    };
+    const encodeBody = encodeRequest(body);
+    const dataUserForCheckSumCreation = signRequest(
+      encodeBody + '/pg/v1/pay' + this.saltKey
+    );
+    const X_VERIFY = dataUserForCheckSumCreation + '###' + this.saltIndex;
+    console.log('this is data user :', dataUserForCheckSumCreation);
+
+    return this.http.post(
+      'https://api.phonepe.com/apis/hermes/pg/v1/pay',
+      { request: encodeBody },
       {
-        responseType: 'json',
+        headers: { 'Content-Type': 'application/json', 'X-VERIFY': X_VERIFY },
       }
     );
   }
