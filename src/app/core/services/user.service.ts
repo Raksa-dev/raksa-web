@@ -290,7 +290,7 @@ export class UserService {
       }
     );
   }
-  async updateUserWalletAmount(
+  async updateUserWalletAmount( 
     amount,
     userId,
     order_id,

@@ -19,7 +19,8 @@ export class TransactionComponent implements OnInit {
     this.activateRoute.queryParams.subscribe((params) => {
       var bytes = crypto.AES.decrypt(params['val'].replace(/ /g, '+'), 'Astro');
       var decryptedData = JSON.parse(bytes.toString(crypto.enc.Utf8));
-      const getUserId = decryptedData.order_id.split('_');
+      console.log('this is decrpted data', decryptedData);
+      // const getUserId = decryptedData.order_id.split('_');
       if (params['type'] == 'success') {
         this.onSuccess(params, decryptedData);
       } else {
