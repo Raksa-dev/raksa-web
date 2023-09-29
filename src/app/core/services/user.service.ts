@@ -283,7 +283,7 @@ export class UserService {
     console.log('this is data user :', dataUserForCheckSumCreation);
 
     return this.http.post(
-      'https://api.phonepe.com/apis/hermes/pg/v1/pay/',
+      'https://api.phonepe.com/apis/hermes/pg/v1/pay',
       { request: encodeBody },
       {
         headers: { 'Content-Type': 'application/json', 'X-VERIFY': X_VERIFY },
